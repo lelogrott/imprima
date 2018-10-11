@@ -47,7 +47,7 @@ public class Player : MovingObject {
     // Update is called once per frame
     void Update () {
         if (!GameManager.instance.playersTurn) return;
-
+        GameManager.instance.playersTurn = false;
         int horizontal = 0;
         int vertical = 0;
 
@@ -66,7 +66,7 @@ public class Player : MovingObject {
             CheckIfGameOver();
             ThrowAxe();
         }
-		
+
 	}
 
     private void ThrowAxe()
@@ -84,7 +84,7 @@ public class Player : MovingObject {
     
     protected override void AttemptMove<T>(int xDir, int yDir)
     {
-        food--;
+        // food--;
         foodText.text = "Food: " + food;
 
         base.AttemptMove<T>(xDir, yDir);
@@ -99,7 +99,7 @@ public class Player : MovingObject {
 
         CheckIfGameOver();
 
-        GameManager.instance.playersTurn = false;
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
