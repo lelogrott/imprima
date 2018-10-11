@@ -46,6 +46,12 @@ public class Player : MovingObject {
 
     // Update is called once per frame
     void Update () {
+         if(Input.GetKeyDown("space"))
+        {
+            LoseFood(10);
+            CheckIfGameOver();
+            ThrowAxe();
+        }
         if (!GameManager.instance.playersTurn) return;
         GameManager.instance.playersTurn = false;
         int horizontal = 0;
@@ -60,12 +66,7 @@ public class Player : MovingObject {
         if (horizontal != 0 || vertical != 0)
             AttemptMove<Wall>(horizontal, vertical);
 
-        if(Input.GetKeyDown("space"))
-        {
-            LoseFood(10);
-            CheckIfGameOver();
-            ThrowAxe();
-        }
+       
 
 	}
 
