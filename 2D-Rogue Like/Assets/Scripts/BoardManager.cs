@@ -25,6 +25,7 @@ public class BoardManager : MonoBehaviour {
 	public Count wallCount = new Count (5, 9);
 	public Count foodCount = new Count (1, 5);
 	public GameObject exit;
+	public GameObject back;
 	public GameObject[] floorTiles;
 	public GameObject[] wallTiles;
 	public GameObject[] foodTiles;
@@ -44,6 +45,8 @@ public class BoardManager : MonoBehaviour {
 	void InitialiseList()
 	{
 		gridPositions.Clear ();
+		layoutObjects.Clear ();
+		layoutPositions.Clear ();
 		for (int x = 1; x < columns - 1; x++) 
 		{
 			for (int y = 1; y < rows - 1; y++) 
@@ -112,9 +115,11 @@ public class BoardManager : MonoBehaviour {
 			LayoutObjectAtRandom (foodTiles, foodCount.minimum, foodCount.maximum);
 			int enemyCount = (int)Mathf.Log (level, 2f);
 			LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
-			saveCurrentMap();
 		}
+		saveCurrentMap();
 		Instantiate (exit, new Vector3 (columns - 1, rows - 1, 0F), Quaternion.identity);
+		if (level > 1)
+			Instantiate (back, new Vector3 (0, rows - 1, 0F), Quaternion.identity);
 	}
 
 	public void saveCurrentMap() {

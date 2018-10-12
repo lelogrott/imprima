@@ -24,6 +24,7 @@ public class Player : MovingObject {
 
     private Animator animator;
     private int food;
+    private bool goingBack = false;
     private Vector2 lastMovement;
 
 
@@ -42,6 +43,12 @@ public class Player : MovingObject {
     private void OnDisable()
     {
         GameManager.instance.playerFoodPoints = food;
+        // check if player is going back to the previous room
+        // if so, we need to decrease the level by 2, since we always increase it
+        // by one at the beginning
+        if (goingBack) 
+            GameManager.instance.setLevel(GameManager.instance.getLevel() - 2);
+        goingBack = false;
     }
 
     // Update is called once per frame
@@ -107,6 +114,12 @@ public class Player : MovingObject {
     {
         if(other.tag == "Exit")
         {
+            Invoke("Restart", restartLevelDelay);
+            enabled = false;
+        }
+        else if(other.tag == "Back")
+        {
+            goingBack = true;
             Invoke("Restart", restartLevelDelay);
             enabled = false;
         }

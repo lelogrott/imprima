@@ -11,13 +11,14 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance = null;
     public BoardManager boardScript;
     public int playerFoodPoints = 100;
-    public bool playersTurn = true;
+    [HideInInspector] public bool playersTurn = true;
 	public Dictionary<int, string> boardDict = new Dictionary<int, string>();
 
 
     private Text levelText;
     private GameObject levelImage;
     private int level = 1;
+    private int maxLevel = 10;
     private List<Enemy> enemies;
     private bool enemiesMoving;
     private bool doingSetup;
@@ -61,8 +62,6 @@ public class GameManager : MonoBehaviour {
         levelText.text = "Day " + level;
         levelImage.SetActive(true);
         Invoke("HideLevelImage", levelStartDelay);
-
-        level = 1;
        
         enemies.Clear();
         boardScript.SetupScene(level);
@@ -116,5 +115,10 @@ public class GameManager : MonoBehaviour {
     public int getLevel()
     {
         return level;
+    }
+
+    public void setLevel(int level)
+    {
+        this.level = level;
     }
 }
