@@ -121,4 +121,9 @@ public class GameManager : MonoBehaviour {
     {
         this.level = level;
     }
+
+    public int getMaxLevel()
+    {
+        return maxLevel;
+    }
 }

@@ -117,7 +117,8 @@ public class BoardManager : MonoBehaviour {
 			LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
 		}
 		saveCurrentMap();
-		Instantiate (exit, new Vector3 (columns - 1, rows - 1, 0F), Quaternion.identity);
+		if (level < GameManager.instance.getMaxLevel())
+			Instantiate (exit, new Vector3 (columns - 1, rows - 1, 0F), Quaternion.identity);
 		if (level > 1)
 			Instantiate (back, new Vector3 (0, rows - 1, 0F), Quaternion.identity);
 	}
