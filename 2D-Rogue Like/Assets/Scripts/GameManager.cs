@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour {
     public BoardManager boardScript;
     public int playerFoodPoints = 100;
     public bool playersTurn = true;
+	public Dictionary<int, string> boardDict = new Dictionary<int, string>();
+
 
     private Text levelText;
     private GameObject levelImage;
@@ -27,18 +29,17 @@ public class GameManager : MonoBehaviour {
         else if (instance != this)
             Destroy(gameObject);
 
-
         DontDestroyOnLoad(gameObject);
         enemies = new List<Enemy>();
         boardScript = GetComponent<BoardManager>();
-        //InitGame();
+        // InitGame();
     }
 
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
         instance.InitGame();
-        instance.level++;     
+        instance.level++;
     }
 
     void OnEnable()
@@ -61,6 +62,8 @@ public class GameManager : MonoBehaviour {
         levelImage.SetActive(true);
         Invoke("HideLevelImage", levelStartDelay);
 
+        level = 1;
+       
         enemies.Clear();
         boardScript.SetupScene(level);
     }
@@ -108,5 +111,10 @@ public class GameManager : MonoBehaviour {
 
         playersTurn = true;
         enemiesMoving = false;
+    }
+
+    public int getLevel()
+    {
+        return level;
     }
 }

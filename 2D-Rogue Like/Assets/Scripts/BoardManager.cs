@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.IO;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -29,10 +30,17 @@ public class BoardManager : MonoBehaviour {
 	public GameObject[] foodTiles;
 	public GameObject[] enemyTiles;
 	public GameObject[] outerWallsTiles;
+	public List<GameObject> layoutObjects = new List<GameObject>();
+	public List<Vector3> layoutPositions = new List<Vector3>();
 
 	private Transform boardHolder;
-	private List <Vector3> gridPositions = new List<Vector3>();
+	private List<Vector3> gridPositions = new List<Vector3> ();
 
+	 void Update() 
+	 {
+		 DontDestroyOnLoad(gameObject);
+	 }
+	
 	void InitialiseList()
 	{
 		gridPositions.Clear ();
@@ -46,7 +54,7 @@ public class BoardManager : MonoBehaviour {
 	}
 
 	void BoardSetup()
-	{
+	{	
 		boardHolder = new GameObject ("Board").transform;
 
 		for (int x = -1; x < columns + 1; x++) 
@@ -58,10 +66,11 @@ public class BoardManager : MonoBehaviour {
 					toInstantiate = outerWallsTiles [Random.Range (0, outerWallsTiles.Length)];
 
 				GameObject instance = Instantiate (toInstantiate, new Vector3 (x, y, 0f), Quaternion.identity) as GameObject;
-
 				instance.transform.SetParent (boardHolder);
+					
 			}
 		}
+		// Debug.LogWarning(boardHolder);
 	}
 
 	Vector3 RandomPosition()
@@ -80,12 +89,14 @@ public class BoardManager : MonoBehaviour {
 		{
 			Vector3 randomPosition = RandomPosition ();
             int index = Random.Range(0, tileArray.Length);
-            //Debug.LogFormat("index = {0} random = {1}", index, randomPosition);
 
             GameObject tileChoice = tileArray [index];
 			Instantiate (tileChoice, randomPosition, Quaternion.identity);
+			layoutObjects.Add(tileChoice);
+			layoutPositions.Add(randomPosition);
 		}
-
+		// Debug.LogWarning("LAYOUTS\nobjects:\n>> " + layoutObjects.Count + "\npositions:\n>> " + layoutPositions.Count);
+		
 	}
 
 
@@ -93,10 +104,51 @@ public class BoardManager : MonoBehaviour {
 	{
 		BoardSetup ();
 		InitialiseList ();
-		LayoutObjectAtRandom (wallTiles, wallCount.minimum, wallCount.maximum);
-		LayoutObjectAtRandom (foodTiles, foodCount.minimum, foodCount.maximum);
-		int enemyCount = (int)Mathf.Log (level, 2f);
-		LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
+		if (GameManager.instance.boardDict.ContainsKey(level))
+			loadMap (level);
+		else
+		{
+			LayoutObjectAtRandom (wallTiles, wallCount.minimum, wallCount.maximum);
+			LayoutObjectAtRandom (foodTiles, foodCount.minimum, foodCount.maximum);
+			int enemyCount = (int)Mathf.Log (level, 2f);
+			LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
+			saveCurrentMap();
+		}
 		Instantiate (exit, new Vector3 (columns - 1, rows - 1, 0F), Quaternion.identity);
+	}
+
+	public void saveCurrentMap() {
+		int level = GameManager.instance.getLevel();
+		// Debug.LogWarning("SAVING >> " + this.layoutObjects.Count);
+		// Debug.LogWarning(">> Saving floor number " + level);
+		BoardManagerData boardData = new BoardManagerData(this, level);
+		string boardDataAsJson = JsonUtility.ToJson(boardData);
+		// Debug.LogWarning(">>>> Json string: " + boardDataAsJson);
+		if (GameManager.instance.boardDict.ContainsKey(level))
+			GameManager.instance.boardDict[level] = boardDataAsJson;
+		else
+			GameManager.instance.boardDict.Add(level, boardDataAsJson);
+	}
+
+	public void loadMap(int level) {
+		string jsonString = GameManager.instance.boardDict[level];
+		BoardManagerData boardData = JsonUtility.FromJson<BoardManagerData>(jsonString);
+		// Debug.LogWarning(">> loading map: " + jsonString);
+		this.layoutObjects = boardData.layoutObjects;
+		this.layoutPositions = boardData.layoutPositions;
+		for (int i = 0; i < layoutObjects.Count; i++)
+		{
+			Instantiate ((GameObject) layoutObjects[i], layoutPositions[i], Quaternion.identity);
+		}
+	}
+}
+
+[Serializable]
+public class BoardManagerData {
+	public List<GameObject> layoutObjects = new List<GameObject>();
+	public List<Vector3> layoutPositions = new List<Vector3>();
+	public BoardManagerData(BoardManager bm, int level){
+		this.layoutObjects = bm.layoutObjects;
+		this.layoutPositions = bm.layoutPositions;
 	}
 }
