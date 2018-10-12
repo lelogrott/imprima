@@ -11,6 +11,7 @@ public class Player : MovingObject {
     public int pointsPerSoda = 20;
     public float restartLevelDelay = 1f;
     public Text foodText;
+    public Text timeText;
     public AudioClip moveSound1;
     public AudioClip moveSound2;
     public AudioClip eatSound1;
@@ -24,6 +25,7 @@ public class Player : MovingObject {
 
     private Animator animator;
     private int food;
+    private float totalTime = 60.0f;
     private bool goingBack = false;
     private Vector2 lastMovement;
 
@@ -36,6 +38,7 @@ public class Player : MovingObject {
         food = GameManager.instance.playerFoodPoints;
 
         foodText.text = "Food: " + food;
+        timeText.text = "Tempo: " + totalTime;
 
         base.Start();
 	}
@@ -53,6 +56,8 @@ public class Player : MovingObject {
 
     // Update is called once per frame
     void Update () {
+        totalTime -= Time.deltaTime;
+        timeText.text = "Tempo: " + totalTime;
          if(Input.GetKeyDown("space"))
         {
             LoseFood(10);
