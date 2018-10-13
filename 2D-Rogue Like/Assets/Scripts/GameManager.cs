@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance = null;
     public BoardManager boardScript;
     public int playerFoodPoints = 100;
+    public float totalTimeLeft = 20f;
     [HideInInspector] public bool playersTurn = true;
 	public Dictionary<int, string> boardDict = new Dictionary<int, string>();
 
@@ -73,11 +74,24 @@ public class GameManager : MonoBehaviour {
         doingSetup = false;
     }
 
-    public void GameOver()
+    public void GameOver(string reason)
     {
-        levelText.text = "After " + level + " days, you starved.";
-        levelImage.SetActive(true);
-        enabled = false;
+        
+        switch (reason)
+        {
+            case "Food":
+                levelText.text = "After " + level + " days, you starved.";
+                levelImage.SetActive(true);
+                enabled = false;
+                break;
+            case "Time":
+                levelText.text = "Acabou o tempo!\nVocê foi pego!";
+                levelImage.SetActive(true);
+                enabled = false;
+                break;
+        }
+
+        
     }
 	
 	// Update is called once per frame
@@ -125,5 +139,9 @@ public class GameManager : MonoBehaviour {
     public int getMaxLevel()
     {
         return maxLevel;
+    }
+
+    public bool getDoingSetup() {
+        return doingSetup;
     }
 }

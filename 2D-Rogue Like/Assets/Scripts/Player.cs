@@ -25,7 +25,7 @@ public class Player : MovingObject {
 
     private Animator animator;
     private int food;
-    private float totalTime = 60.0f;
+    private float totalTime = 20f;
     private bool goingBack = false;
     private Vector2 lastMovement;
 
@@ -36,9 +36,9 @@ public class Player : MovingObject {
         animator = GetComponent<Animator>();
         // Debug.LogWarning("entered player start");
         food = GameManager.instance.playerFoodPoints;
+        totalTime = GameManager.instance.totalTimeLeft;
 
         foodText.text = "Food: " + food;
-        timeText.text = "Tempo: " + totalTime;
 
         base.Start();
 	}
@@ -46,6 +46,7 @@ public class Player : MovingObject {
     private void OnDisable()
     {
         GameManager.instance.playerFoodPoints = food;
+        GameManager.instance.totalTimeLeft = totalTime;
         // check if player is going back to the previous room
         // if so, we need to decrease the level by 2, since we always increase it
         // by one at the beginning
@@ -56,9 +57,22 @@ public class Player : MovingObject {
 
     // Update is called once per frame
     void Update () {
-        totalTime -= Time.deltaTime;
-        timeText.text = "Tempo: " + totalTime;
-         if(Input.GetKeyDown("space"))
+        if (!GameManager.instance.getDoingSetup() && totalTime > 0)
+        {
+            totalTime -= Time.deltaTime;
+            if (totalTime < 0) totalTime = 0;
+            var coloredTime = "<color=#ff0000ff>" + totalTime.ToString("0.00") + "</color>";
+            
+            // use red color for time if its lower then 10 seconds left
+            if (totalTime < 10)
+                timeText.text = "Tempo: " + coloredTime;
+            else
+                timeText.text = "Tempo: " + totalTime.ToString("0.00");
+
+            CheckIfGameOver();
+        }
+
+        if(Input.GetKeyDown("space"))
         {
             LoseFood(10);
             CheckIfGameOver();
@@ -166,11 +180,17 @@ public class Player : MovingObject {
 
     private void CheckIfGameOver()
     {
-        if (food <= 0)
+        if (food <= 0) // if the food is over
         {
             SoundManager.instance.PlaySingle(gameOverSound);
             SoundManager.instance.musicSource.Stop();
-            GameManager.instance.GameOver();
+            GameManager.instance.GameOver("Food");
+        }
+        else if (!(totalTime > 0)) // if there is no time left
+        {
+            SoundManager.instance.PlaySingle(gameOverSound);
+            SoundManager.instance.musicSource.Stop();
+            GameManager.instance.GameOver("Time");
         }
             
     }
