@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class Player : MovingObject {
 
+    public Inventory inventory;
     public int wallDamage = 1;
     public int pointsPerFood = 10;
     public int pointsPerSoda = 20;
@@ -155,6 +156,12 @@ public class Player : MovingObject {
             foodText.text = "+" + pointsPerSoda + " Food: " + food;
             SoundManager.instance.RandomizeSfx(drinkSound1, drinkSound2);
             other.gameObject.SetActive(false);
+        }
+
+        IInventoryItem item = other.GetComponent<IInventoryItem> ();
+        if (item != null)
+        {
+            inventory.AddItem(item);
         }
     }
 
