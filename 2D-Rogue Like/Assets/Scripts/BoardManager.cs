@@ -27,6 +27,7 @@ public class BoardManager : MonoBehaviour {
 	public GameObject exit;
 	public GameObject back;
 	public GameObject eye;
+	public GameObject laserWeapon;
 	public GameObject[] floorTiles;
 	public GameObject[] wallTiles;
 	public GameObject[] foodTiles;
@@ -122,8 +123,9 @@ public class BoardManager : MonoBehaviour {
 			Instantiate (exit, new Vector3 (columns - 1, rows - 1, 0F), Quaternion.identity);
 		if (level > 1)
 			Instantiate (back, new Vector3 (0, rows - 1, 0F), Quaternion.identity);
-		Instantiate (eye, new Vector3 (columns - 1, 0, 0F), Quaternion.identity);
-		Instantiate (eye, new Vector3 (columns - 2, 0, 0F), Quaternion.identity);
+		// Instantiate (eye, new Vector3 (columns - 1, 0, 0F), Quaternion.identity);
+		// Instantiate (eye, new Vector3 (columns - 2, 0, 0F), Quaternion.identity);
+		LayoutObjectAtRandom(new GameObject[] {eye, laserWeapon}, 2, 2);
 	}
 
 	public void saveCurrentMap() {

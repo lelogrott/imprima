@@ -162,7 +162,6 @@ public class Player : MovingObject {
         IInventoryItem item = other.GetComponent<IInventoryItem> ();
         if (item != null)
         {
-            Debug.LogWarning(">> detected eye " + item);
             inventory.AddItem(item);
         }
     }
