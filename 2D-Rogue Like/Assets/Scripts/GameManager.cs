@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour {
     public int playerFoodPoints = 100;
     public float totalTimeLeft = 20f;
     [HideInInspector] public bool playersTurn = true;
+    public List<IInventoryItem> inventoryItems = new List<IInventoryItem> ();
 	public Dictionary<int, string> boardDict = new Dictionary<int, string>();
 
 

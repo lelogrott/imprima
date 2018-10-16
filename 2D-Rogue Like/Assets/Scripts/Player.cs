@@ -38,6 +38,7 @@ public class Player : MovingObject {
         // Debug.LogWarning("entered player start");
         food = GameManager.instance.playerFoodPoints;
         totalTime = GameManager.instance.totalTimeLeft;
+        inventory.setMItems(GameManager.instance.inventoryItems);
 
         foodText.text = "Food: " + food;
 
@@ -48,6 +49,7 @@ public class Player : MovingObject {
     {
         GameManager.instance.playerFoodPoints = food;
         GameManager.instance.totalTimeLeft = totalTime;
+        GameManager.instance.inventoryItems = new List<IInventoryItem> (inventory.getMItems());
         // check if player is going back to the previous room
         // if so, we need to decrease the level by 2, since we always increase it
         // by one at the beginning
@@ -101,7 +103,6 @@ public class Player : MovingObject {
     {
         Vector3 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouse.z = 0;
-        RaycastHit2D hit = Physics2D.Raycast (transform.position, transform.up);
 
         GameObject newAxe = Instantiate(Axe, transform.position + new Vector3(lastMovement.x, lastMovement.y), transform.rotation) as GameObject;
 

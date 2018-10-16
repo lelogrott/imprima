@@ -33,4 +33,21 @@ public class Inventory : MonoBehaviour {
 			}
 		}
 	}
+
+	public void setMItems (List<IInventoryItem> itemsList)
+	{
+		foreach (IInventoryItem item in itemsList)
+		{
+			mItems.Add(item);
+			if (ItemAdded != null)
+			{
+				ItemAdded(this, new InventoryEventArgs(item));
+			}
+		}
+	}
+
+	public List<IInventoryItem> getMItems ()
+	{
+		return mItems;
+	}
 }
