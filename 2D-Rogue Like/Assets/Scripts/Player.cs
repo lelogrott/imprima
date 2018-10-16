@@ -162,6 +162,7 @@ public class Player : MovingObject {
         IInventoryItem item = other.GetComponent<IInventoryItem> ();
         if (item != null)
         {
+            Debug.LogWarning(">> detected eye " + item);
             inventory.AddItem(item);
         }
     }
@@ -188,18 +189,18 @@ public class Player : MovingObject {
 
     private void CheckIfGameOver()
     {
-        if (food <= 0) // if the food is over
-        {
-            SoundManager.instance.PlaySingle(gameOverSound);
-            SoundManager.instance.musicSource.Stop();
-            GameManager.instance.GameOver("Food");
-        }
-        else if (!(totalTime > 0)) // if there is no time left
-        {
-            SoundManager.instance.PlaySingle(gameOverSound);
-            SoundManager.instance.musicSource.Stop();
-            GameManager.instance.GameOver("Time");
-        }
+        // if (food <= 0) // if the food is over
+        // {
+        //     SoundManager.instance.PlaySingle(gameOverSound);
+        //     SoundManager.instance.musicSource.Stop();
+        //     GameManager.instance.GameOver("Food");
+        // }
+        // else if (!(totalTime > 0)) // if there is no time left
+        // {
+        //     SoundManager.instance.PlaySingle(gameOverSound);
+        //     SoundManager.instance.musicSource.Stop();
+        //     GameManager.instance.GameOver("Time");
+        // }
             
     }
 }
