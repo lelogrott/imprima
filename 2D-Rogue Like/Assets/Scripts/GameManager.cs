@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour {
     private int level = 1;
     private int maxLevel = 10;
     private List<Enemy> enemies;
+    private List<SonicBomb> bombs;
     private bool enemiesMoving;
     private bool doingSetup;
 
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour {
 
         DontDestroyOnLoad(gameObject);
         enemies = new List<Enemy>();
+        bombs = new List<SonicBomb>();
         boardScript = GetComponent<BoardManager>();
         // InitGame();
     }
@@ -66,6 +68,7 @@ public class GameManager : MonoBehaviour {
         Invoke("HideLevelImage", levelStartDelay);
        
         enemies.Clear();
+        bombs.Clear();
         boardScript.SetupScene(level);
     }
 
@@ -106,6 +109,10 @@ public class GameManager : MonoBehaviour {
     public void AddEnemyToList(Enemy script)
     {
         enemies.Add(script);
+    }
+    public void AddBombToList(SonicBomb script)
+    {
+        bombs.Add(script);
     }
 
     IEnumerator MoveEnemies()
