@@ -21,7 +21,16 @@ public class Laser : MonoBehaviour {
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up);
 		Debug.DrawLine(transform.position, hit.point);
 		LaserHit.position = hit.point;
+		
 		lineRenderer.SetPosition(0, transform.position);
 		lineRenderer.SetPosition(1, LaserHit.position);
+
+		if ( hit.collider != null )
+        {
+			if (hit.collider.tag == "Player")
+            {
+				hit.collider.gameObject.GetComponent<Player>().LoseFood(10);
+			}
+        }
 	}
 }
