@@ -77,7 +77,7 @@ public class Player : MovingObject {
 
         if(Input.GetKeyDown("space"))
         {
-            LoseFood(10);
+            animator.SetTrigger("playerRanged");
             CheckIfGameOver();
             ThrowAxe();
         }

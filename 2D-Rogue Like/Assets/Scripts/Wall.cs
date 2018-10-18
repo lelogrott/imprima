@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Wall : MonoBehaviour {
 
-    public Sprite dmgSprite;
-    public int hp = 4;
+    public Sprite[] dmgSprite;
+    private int hp;
     public AudioClip chopSound1;
     public AudioClip chopSound2;
 
@@ -13,14 +13,16 @@ public class Wall : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        hp = dmgSprite.Length;
 	}
 	
 	public void DamageWall(int loss)
     {
         SoundManager.instance.RandomizeSfx(chopSound1, chopSound2);
-        spriteRenderer.sprite = dmgSprite;
         hp -= loss;
-        if (hp <= 0)
+        if (hp < 0)
             gameObject.SetActive(false);
+        else
+            spriteRenderer.sprite = dmgSprite[hp];
     }
 }

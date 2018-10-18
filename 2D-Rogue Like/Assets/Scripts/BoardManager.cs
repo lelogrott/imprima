@@ -68,8 +68,10 @@ public class BoardManager : MonoBehaviour {
 			for (int y = -1; y < rows + 1; y++) 
 			{
 				GameObject toInstantiate = floorTiles [Random.Range (0, floorTiles.Length)];
-				if (x == -1 || x == columns || y == -1 || y == rows)
-					toInstantiate = outerWallsTiles [Random.Range (0, outerWallsTiles.Length)];
+				if (x == -1 || x == columns)
+					toInstantiate = outerWallsTiles [1];
+				else if (y == -1 || y == rows)
+					toInstantiate = outerWallsTiles [0];
 
 				GameObject instance = Instantiate (toInstantiate, new Vector3 (x, y, 0f), Quaternion.identity) as GameObject;
 				instance.transform.SetParent (boardHolder);
