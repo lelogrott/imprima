@@ -4,13 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class Player : MovingObject {
+public class Player : MonoBehaviour {
+// public class Player : MovingObject {
 
     public Inventory inventory;
     public int wallDamage = 1;
     public int pointsPerFood = 10;
     public int pointsPerSoda = 20;
     public float restartLevelDelay = 1f;
+    public float speed = 2;
+    public float horizontal;
+    public float vertical;
     public Text foodText;
     public Text timeText;
     public AudioClip moveSound1;
@@ -21,28 +25,31 @@ public class Player : MovingObject {
     public AudioClip drinkSound2;
     public AudioClip gameOverSound;
 
-    public GameObject Axe;
-    public float axeForce;
+    public GameObject Laser;
+    public float laserForce;
 
     private Animator animator;
     private int food;
     private float totalTime = 20f;
     private bool goingBack = false;
     private Vector2 lastMovement;
+    private Rigidbody2D rb2d;
+    private Transform rangedSource;
 
 
 
-    // Use this for initialization
-    protected override void Start () {
+    void Start () {
+        rb2d = GetComponent<Rigidbody2D> ();
+        rb2d.freezeRotation = true;
         animator = GetComponent<Animator>();
         // Debug.LogWarning("entered player start");
         food = GameManager.instance.playerFoodPoints;
         totalTime = GameManager.instance.totalTimeLeft;
         inventory.setMItems(GameManager.instance.inventoryItems);
+        rangedSource = transform.Find("RangedAttackSource");
 
         foodText.text = "Food: " + food;
 
-        base.Start();
 	}
 
     private void OnDisable()
@@ -56,6 +63,35 @@ public class Player : MovingObject {
         if (goingBack) 
             GameManager.instance.setLevel(GameManager.instance.getLevel() - 2);
         goingBack = false;
+    }
+
+    void FixedUpdate ()
+    {
+        horizontal = Input.GetAxisRaw("Horizontal") * speed;
+        vertical = Input.GetAxisRaw("Vertical") * speed;
+        if (horizontal < 0)
+        {
+            if (GetComponent<SpriteRenderer>().flipX == false)
+            {
+                Vector3 flipPosition = rangedSource.position;
+                flipPosition.x += 0.54f;
+                rangedSource.position = flipPosition;
+            }
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (horizontal > 0)
+        {
+            if (GetComponent<SpriteRenderer>().flipX == true)
+            {
+                Vector3 flipPosition = rangedSource.position;
+                flipPosition.x -= 0.54f;
+                rangedSource.position = flipPosition;
+            }
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+        Vector2 movement = new Vector2 (horizontal, vertical);
+        rb2d.velocity = movement * speed;
+
     }
 
     // Update is called once per frame
@@ -79,58 +115,20 @@ public class Player : MovingObject {
         {
             animator.SetTrigger("playerRanged");
             CheckIfGameOver();
-            ThrowAxe();
+            fireLaser();
         }
-        if (!GameManager.instance.playersTurn) return;
-        GameManager.instance.playersTurn = false;
-        int horizontal = 0;
-        int vertical = 0;
-
-        horizontal = (int)Input.GetAxisRaw("Horizontal");
-        vertical = (int)Input.GetAxisRaw("Vertical");
-
-        if (horizontal != 0)
-            vertical = 0;
-
-        if (horizontal != 0 || vertical != 0)
-            AttemptMove<Wall>(horizontal, vertical);
-
-       
-
 	}
 
-    private void ThrowAxe()
+    private void fireLaser()
     {
         Vector3 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouse.z = 0;
-
-        GameObject newAxe = Instantiate(Axe, transform.position + new Vector3(lastMovement.x, lastMovement.y), transform.rotation) as GameObject;
-
-        newAxe.GetComponent<Rigidbody2D>().AddForce(lastMovement*axeForce);
-        
+        GameObject newShot = Instantiate(Laser, rangedSource.position, transform.rotation) as GameObject;
+        newShot.transform.up = (rangedSource.position - mouse) * -laserForce;
+        newShot.GetComponent<Rigidbody2D>().AddForce((rangedSource.position - mouse).normalized * -laserForce);
         return;
     }
     
-    protected override void AttemptMove<T>(int xDir, int yDir)
-    {
-        // food--;
-        foodText.text = "Food: " + food;
-
-        base.AttemptMove<T>(xDir, yDir);
-
-        RaycastHit2D hit;
-        if (Move (xDir, yDir, out hit))
-        {
-            SoundManager.instance.RandomizeSfx(moveSound1, moveSound2);
-        }
-
-        lastMovement = new Vector2(xDir, yDir);
-
-        CheckIfGameOver();
-
-
-    }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "Exit")
@@ -158,6 +156,10 @@ public class Player : MovingObject {
             SoundManager.instance.RandomizeSfx(drinkSound1, drinkSound2);
             other.gameObject.SetActive(false);
         }
+         else if (other.tag == "Wall")
+        {
+            Debug.LogWarning(other);
+        }
 
         IInventoryItem item = other.GetComponent<IInventoryItem> ();
         if (item != null)
@@ -166,12 +168,12 @@ public class Player : MovingObject {
         }
     }
 
-    protected override void OnCantMove<T>(T component)
-    {
-        Wall hitWall = component as Wall;
-        hitWall.DamageWall(wallDamage);
-        animator.SetTrigger("playerChop");
-    }
+    // protected override void OnCantMove<T>(T component)
+    // {
+    //     Wall hitWall = component as Wall;
+    //     hitWall.DamageWall(wallDamage);
+    //     animator.SetTrigger("playerChop");
+    // }
 
     private void Restart()
     {

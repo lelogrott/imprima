@@ -20,7 +20,7 @@ public class PickAxe : MonoBehaviour {
 
         if (other.tag == "Enemy") other.SendMessage("DamageEnemy", damage, SendMessageOptions.DontRequireReceiver);
 
-        Destroy(gameObject);
+        if (other.tag != "Player") Destroy(gameObject);
         
     }
 

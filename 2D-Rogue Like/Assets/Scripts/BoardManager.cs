@@ -119,6 +119,7 @@ public class BoardManager : MonoBehaviour {
 			LayoutObjectAtRandom (wallTiles, wallCount.minimum, wallCount.maximum);
 			LayoutObjectAtRandom (foodTiles, foodCount.minimum, foodCount.maximum);
 			int enemyCount = (int)Mathf.Log (level, 2f);
+			enemyCount = 3;
 			LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
 		}
 		saveCurrentMap();

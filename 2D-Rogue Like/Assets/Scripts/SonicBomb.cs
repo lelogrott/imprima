@@ -26,9 +26,10 @@ public class SonicBomb : MonoBehaviour {
 	{
 		timer += Time.deltaTime;
 		double distance = Math.Sqrt(Math.Pow(transform.position.x - target.position.x, 2) + Math.Pow(transform.position.y - target.position.y, 2));
+		// Debug.LogWarning("distancia: " + distance);
 		double beepPitch = 1/(1 + distance);
-		Debug.LogWarning(beepPitch);
-		Debug.LogWarning(">> timer: " + timer);
+		// Debug.LogWarning("pitch: " + beepPitch);
+		// Debug.LogWarning(">> timer: " + timer);
 		if (timer > 0.1)
 		{
 			audio.pitch = (float) ( 20 * beepPitch);
