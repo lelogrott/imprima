@@ -11,6 +11,7 @@ public class Player : MonoBehaviour {
     public int wallDamage = 1;
     public int pointsPerFood = 10;
     public int pointsPerSoda = 20;
+    public int meleePower = 1;
     public float restartLevelDelay = 1f;
     public float speed = 2;
     public float horizontal;
@@ -123,7 +124,6 @@ public class Player : MonoBehaviour {
             animator.SetTrigger("playerChop");
             CheckIfGameOver();
             meleeAttack();
-            // disableMelee();
         }
 	}
 
@@ -147,14 +147,13 @@ public class Player : MonoBehaviour {
 
     private void meleeAttack()
     {
-        Debug.LogWarning(lastMovement);
-        if (lastMovement.x > 0)
+        if (horizontal > 0)
             transform.Find("MeleeAttackSourceRight").GetComponent<Collider2D>().enabled = true;
-        if (lastMovement.y > 0)
+        if (vertical > 0)
             transform.Find("MeleeAttackSourceUp").GetComponent<Collider2D>().enabled = true;
-        if (lastMovement.x < 0)
+        if (horizontal < 0)
             transform.Find("MeleeAttackSourceLeft").GetComponent<Collider2D>().enabled = true;
-        if (lastMovement.y < 0)
+        if (vertical < 0)
             transform.Find("MeleeAttackSourceDown").GetComponent<Collider2D>().enabled = true;
     }
 
@@ -186,9 +185,13 @@ public class Player : MonoBehaviour {
             SoundManager.instance.RandomizeSfx(drinkSound1, drinkSound2);
             other.gameObject.SetActive(false);
         }
-         else if (other.tag == "Wall")
+        else if (other.tag == "Wall")
         {
             other.SendMessage("DamageWall", wallDamage, SendMessageOptions.DontRequireReceiver);
+        }
+        else if (other.tag == "Enemy")
+        {
+            other.SendMessage("DamageEnemy", meleePower, SendMessageOptions.DontRequireReceiver);
         }
 
         IInventoryItem item = other.GetComponent<IInventoryItem> ();
@@ -196,6 +199,7 @@ public class Player : MonoBehaviour {
         {
             inventory.AddItem(item);
         }
+        disableMelee();
     }
 
     private void Restart()

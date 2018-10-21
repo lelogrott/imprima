@@ -1,8 +1,9 @@
 ﻿<Properties StartupConfiguration="{90ADF256-0626-6614-4FAC-86C22FD5EDB8}|">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/BoardManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MeleeAttack.cs">
     <Files>
       <File FileName="Assets/Scripts/BoardManager.cs" Line="145" Column="1" />
+      <File FileName="Assets/Scripts/MeleeAttack.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

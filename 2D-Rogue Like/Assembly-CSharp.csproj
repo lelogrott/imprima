@@ -77,9 +77,6 @@
     <Compile Include="Assets\Scripts\SonicBomb.cs" />
     <Compile Include="Assets\Scripts\SoundManager.cs" />
     <Compile Include="Assets\Scripts\Wall.cs" />
-    <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
-    <Compile Include="Assets\TutorialInfo\Scripts\TutorialInfo.cs" />
-    <None Include="Assets\TutorialInfo\Fonts\LICENSE.txt" />
     <None Include="Assets\Fonts\OFL.txt" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>/Users/grott/Documents/projects/master/2D-Rogue Like/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
