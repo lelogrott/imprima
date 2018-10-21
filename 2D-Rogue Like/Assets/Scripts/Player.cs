@@ -47,7 +47,7 @@ public class Player : MonoBehaviour {
         totalTime = GameManager.instance.totalTimeLeft;
         inventory.setMItems(GameManager.instance.inventoryItems);
         rangedSource = transform.Find("RangedAttackSource");
-
+        disableMelee();
         foodText.text = "Food: " + food;
 
 	}
@@ -90,6 +90,7 @@ public class Player : MonoBehaviour {
             GetComponent<SpriteRenderer>().flipX = false;
         }
         Vector2 movement = new Vector2 (horizontal, vertical);
+        lastMovement = movement;
         rb2d.velocity = movement * speed;
 
     }
@@ -117,6 +118,13 @@ public class Player : MonoBehaviour {
             CheckIfGameOver();
             fireLaser();
         }
+        if(Input.GetKeyDown("q"))
+        {
+            animator.SetTrigger("playerChop");
+            CheckIfGameOver();
+            meleeAttack();
+            // disableMelee();
+        }
 	}
 
     private void fireLaser()
@@ -128,6 +136,28 @@ public class Player : MonoBehaviour {
         newShot.GetComponent<Rigidbody2D>().AddForce((rangedSource.position - mouse).normalized * -laserForce);
         return;
     }
+
+    private void disableMelee()
+    {
+        transform.Find("MeleeAttackSourceRight").GetComponent<Collider2D>().enabled = false;
+        transform.Find("MeleeAttackSourceLeft").GetComponent<Collider2D>().enabled = false;
+        transform.Find("MeleeAttackSourceDown").GetComponent<Collider2D>().enabled = false;
+        transform.Find("MeleeAttackSourceUp").GetComponent<Collider2D>().enabled = false;
+    }
+
+    private void meleeAttack()
+    {
+        Debug.LogWarning(lastMovement);
+        if (lastMovement.x > 0)
+            transform.Find("MeleeAttackSourceRight").GetComponent<Collider2D>().enabled = true;
+        if (lastMovement.y > 0)
+            transform.Find("MeleeAttackSourceUp").GetComponent<Collider2D>().enabled = true;
+        if (lastMovement.x < 0)
+            transform.Find("MeleeAttackSourceLeft").GetComponent<Collider2D>().enabled = true;
+        if (lastMovement.y < 0)
+            transform.Find("MeleeAttackSourceDown").GetComponent<Collider2D>().enabled = true;
+    }
+
     
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -158,7 +188,7 @@ public class Player : MonoBehaviour {
         }
          else if (other.tag == "Wall")
         {
-            Debug.LogWarning(other);
+            other.SendMessage("DamageWall", wallDamage, SendMessageOptions.DontRequireReceiver);
         }
 
         IInventoryItem item = other.GetComponent<IInventoryItem> ();
@@ -167,13 +197,6 @@ public class Player : MonoBehaviour {
             inventory.AddItem(item);
         }
     }
-
-    // protected override void OnCantMove<T>(T component)
-    // {
-    //     Wall hitWall = component as Wall;
-    //     hitWall.DamageWall(wallDamage);
-    //     animator.SetTrigger("playerChop");
-    // }
 
     private void Restart()
     {
