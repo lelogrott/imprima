@@ -36,7 +36,6 @@ public class Enemy : MonoBehaviour {
     void FixedUpdate()
     {
         MoveEnemy();
-        Debug.LogWarning(facingAngle);
     }
 
     private void attack (RaycastHit2D obstacle)
