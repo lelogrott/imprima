@@ -99,11 +99,11 @@ public class GameManager : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         if (enemiesMoving || doingSetup)
             return;
         playersTurn = true;
-        StartCoroutine(MoveEnemies());
+        // StartCoroutine(MoveEnemies());
 	}
 
     public void AddEnemyToList(Enemy script)
