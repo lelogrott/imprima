@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Sharptile;
 
 public class BoardManager : MonoBehaviour {
 
@@ -34,9 +35,12 @@ public class BoardManager : MonoBehaviour {
 	public GameObject[] foodTiles;
 	public GameObject[] enemyTiles;
 	public GameObject[] outerWallsTiles;
-	public List<GameObject> layoutObjects = new List<GameObject>();
+    public GameObject[] tilesetTiles;
+    public List<GameObject> layoutObjects = new List<GameObject>();
 	public List<Vector3> layoutPositions = new List<Vector3>();
-
+	private string gameDataFileName = "levels.json";
+	private Map levels;
+    
 	private Transform boardHolder;
 	private List<Vector3> gridPositions = new List<Vector3> ();
 
@@ -60,28 +64,44 @@ public class BoardManager : MonoBehaviour {
 	}
 
 	void BoardSetup()
-	{	
+	{
+        //Debug.Log(levels.layers);
 		boardHolder = new GameObject ("Board").transform;
-
-		for (int x = -1; x < columns + 1; x++) 
+        int loop = 0;
+        for (int x = -1; x < 9; x++) 
 		{
 			for (int y = -1; y < rows + 1; y++) 
 			{
-				GameObject toInstantiate = floorTiles [Random.Range (0, floorTiles.Length)];
-				if (x == -1 || x == columns)
-					toInstantiate = outerWallsTiles [1];
-				else if (y == -1 || y == rows)
-					toInstantiate = outerWallsTiles [0];
+                loop++;
+                int newX = x + 1;
+                int newY = y + 1;
+                int index = (10 - newX - 1) * 10 + newY;
+                
+                if (loop < 101)
+                {
+                    //Debug.Log(index +" "+ newX + " " + newY);
 
-				GameObject instance = Instantiate (toInstantiate, new Vector3 (x, y, 0f), Quaternion.identity) as GameObject;
-				instance.transform.SetParent (boardHolder);
-					
-			}
+                    if (levels.layers[0].data[index] != 0)
+                    {
+                        GameObject toInstantiate = tilesetTiles[levels.layers[0].data[index]];
+                        GameObject instance = Instantiate(toInstantiate, new Vector3(y, x, 0f), Quaternion.identity) as GameObject;
+                        instance.transform.SetParent(boardHolder);
+                    }
+
+                    if (levels.layers[1].data[index] != 0)
+                    {
+                        GameObject tileChoice = tilesetTiles[levels.layers[1].data[index]];
+                        Instantiate(tileChoice, new Vector3(y, x, 0f), Quaternion.identity);
+                        layoutObjects.Add(tileChoice);
+                        layoutPositions.Add(new Vector3(y, x, 0f));
+                        Debug.Log("included" + levels.layers[1].data[index]);
+                    }
+                }
+            }
 		}
-		// Debug.LogWarning(boardHolder);
-	}
+    }
 
-	Vector3 RandomPosition()
+    Vector3 RandomPosition()
 	{
 		int randomIndex = Random.Range (0, gridPositions.Count);
 		Vector3 randomPosition = gridPositions [randomIndex];
@@ -110,17 +130,21 @@ public class BoardManager : MonoBehaviour {
 
 	public void SetupScene(int level)
 	{
-		BoardSetup ();
-		InitialiseList ();
-		if (GameManager.instance.boardDict.ContainsKey(level))
-			loadMap (level);
+        LoadGameMaps();
+        InitialiseList();
+        BoardSetup();
+		
+        if (GameManager.instance.boardDict.ContainsKey(level))
+        {
+            loadMap(level);
+        }
 		else
 		{
 			LayoutObjectAtRandom (wallTiles, wallCount.minimum, wallCount.maximum);
 			LayoutObjectAtRandom (foodTiles, foodCount.minimum, foodCount.maximum);
 			int enemyCount = (int)Mathf.Log (level, 2f);
 			enemyCount = 3;
-			LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
+			//LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
 		}
 		saveCurrentMap();
 		if (level < GameManager.instance.getMaxLevel())
@@ -156,6 +180,32 @@ public class BoardManager : MonoBehaviour {
 			Instantiate ((GameObject) layoutObjects[i], layoutPositions[i], Quaternion.identity);
 		}
 	}
+
+    private void LoadGameMaps()
+    {
+        // Path.Combine combines strings into a file path
+        // Application.StreamingAssets points to Assets/StreamingAssets in the Editor, and the StreamingAssets folder in a build
+        string filePath = Path.Combine("Assets/Maps/", gameDataFileName);
+
+        if(File.Exists(filePath))
+        {
+            // Read the json from the file into a string
+            string dataAsJson = File.ReadAllText(filePath); 
+            // Pass the json to JsonUtility, and tell it to create a GameData object from it
+            //dynamic loadedData = JsonUtility.FromJson<dynamic>(dataAsJson);
+            var loadedData = JsonUtility.FromJson<Map>(dataAsJson);
+            // Retrieve the allRoundData property of loadedData
+            levels = loadedData;
+
+			//Debug.Log(levels.layers[0].name);
+            //Debug.Log(levels.layers[1].name);
+        }
+        else
+        {
+            Debug.LogError("Cannot load game data!");
+        }
+
+    }
 }
 
 [Serializable]
@@ -166,4 +216,51 @@ public class BoardManagerData {
 		this.layoutObjects = bm.layoutObjects;
 		this.layoutPositions = bm.layoutPositions;
 	}
+}
+
+public class LevelLayer
+{
+    public IList<int> data { get; set; }
+    public int height { get; set; }
+    public string name { get; set; }
+    public int opacity { get; set; }
+    public string type { get; set; }
+    public bool visible { get; set; }
+    public int width { get; set; }
+    public int x { get; set; }
+    public int y { get; set; }
+}
+
+public class LevelLayerGroup
+{
+    public IList<LevelLayer> layers { get; set; }
+    public string name { get; set; }
+    public int opacity { get; set; }
+    public string type { get; set; }
+    public bool visible { get; set; }
+    public int x { get; set; }
+    public int y { get; set; }
+}
+
+public class Tileset
+{
+    public int firstgid { get; set; }
+    public string source { get; set; }
+}
+
+public class Levels
+{
+    public int height { get; set; }
+    public bool infinite { get; set; }
+    public IList<LevelLayerGroup> layers { get; set; }
+    public int nextobjectid { get; set; }
+    public string orientation { get; set; }
+    public string renderorder { get; set; }
+    public string tiledversion { get; set; }
+    public int tileheight { get; set; }
+    public IList<Tileset> tilesets { get; set; }
+    public int tilewidth { get; set; }
+    public string type { get; set; }
+    public int version { get; set; }
+    public int width { get; set; }
 }
