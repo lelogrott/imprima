@@ -5,18 +5,18 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
-// public class Player : MovingObject {
 
     public Inventory inventory;
     public int wallDamage = 1;
     public int pointsPerFood = 10;
     public int pointsPerSoda = 20;
+    public int meleePower = 1;
     public float restartLevelDelay = 1f;
     public float speed = 2;
     public float horizontal;
     public float vertical;
     public Text foodText;
-    public Text timeText;
+    public Text specialItemCounterText;
     public AudioClip moveSound1;
     public AudioClip moveSound2;
     public AudioClip eatSound1;
@@ -28,10 +28,9 @@ public class Player : MonoBehaviour {
     public float laserForce;
 
     private Animator animator;
+    private int specialItemCounter;
     private int food;
-    private float totalTime = 20f;
     private bool goingBack = false;
-    private Vector2 lastMovement;
     private Rigidbody2D rb2d;
     private Transform rangedSource;
     
@@ -43,19 +42,20 @@ public class Player : MonoBehaviour {
         animator = GetComponent<Animator>();
         // Debug.LogWarning("entered player start");
         food = GameManager.instance.playerFoodPoints;
-        totalTime = GameManager.instance.totalTimeLeft;
+        specialItemCounter = GameManager.instance.specialItemCounter;
         inventory.setMItems(GameManager.instance.inventoryItems);
         rangedSource = transform.Find("RangedAttackSource");
         disableMelee();
         foodText.text = "Food: " + food;
         transform.position = GameManager.instance.playerStartPosition;
+        specialItemCounterText.text = "x" + specialItemCounter;
         //Debug.Log(GameManager.instance.playerStartPosition);
     }
 
     private void OnDisable()
     {
         GameManager.instance.playerFoodPoints = food;
-        GameManager.instance.totalTimeLeft = totalTime;
+        GameManager.instance.specialItemCounter = specialItemCounter;
         GameManager.instance.inventoryItems = new List<IInventoryItem> (inventory.getMItems());
         // check if player is going back to the previous room
         // if so, we need to decrease the level by 2, since we always increase it
@@ -65,8 +65,6 @@ public class Player : MonoBehaviour {
         goingBack = false;
         //playerStartPosition = rb2d.transform.position;
         //Debug.Log(playerStartPosition);
-
-
     }
 
     void FixedUpdate ()
@@ -94,28 +92,11 @@ public class Player : MonoBehaviour {
             GetComponent<SpriteRenderer>().flipX = false;
         }
         Vector2 movement = new Vector2 (horizontal, vertical);
-        lastMovement = movement;
         rb2d.velocity = movement * speed;
-
     }
 
     // Update is called once per frame
     void Update () {
-        if (!GameManager.instance.getDoingSetup() && totalTime > 0)
-        {
-            totalTime -= Time.deltaTime;
-            if (totalTime < 0) totalTime = 0;
-            var coloredTime = "<color=#ff0000ff>" + totalTime.ToString("0.00") + "</color>";
-            
-            // use red color for time if its lower then 10 seconds left
-            if (totalTime < 10)
-                timeText.text = "Tempo: " + coloredTime;
-            else
-                timeText.text = "Tempo: " + totalTime.ToString("0.00");
-
-            CheckIfGameOver();
-        }
-
         if(Input.GetKeyDown("space"))
         {
             animator.SetTrigger("playerRanged");
@@ -151,14 +132,13 @@ public class Player : MonoBehaviour {
 
     private void meleeAttack()
     {
-        Debug.LogWarning(lastMovement);
-        if (lastMovement.x > 0)
+        if (horizontal > 0)
             transform.Find("MeleeAttackSourceRight").GetComponent<Collider2D>().enabled = true;
-        if (lastMovement.y > 0)
+        if (vertical > 0)
             transform.Find("MeleeAttackSourceUp").GetComponent<Collider2D>().enabled = true;
-        if (lastMovement.x < 0)
+        if (horizontal < 0)
             transform.Find("MeleeAttackSourceLeft").GetComponent<Collider2D>().enabled = true;
-        if (lastMovement.y < 0)
+        if (vertical < 0)
             transform.Find("MeleeAttackSourceDown").GetComponent<Collider2D>().enabled = true;
     }
 
@@ -206,14 +186,28 @@ public class Player : MonoBehaviour {
         }
          else if (other.tag == "Wall")
         {
-            other.SendMessage("DamageWall", wallDamage, SendMessageOptions.DontRequireReceiver);
+            if (inventory.hasItem("Strength"))
+                other.SendMessage("DamageWall", wallDamage, SendMessageOptions.DontRequireReceiver);
+        }
+        else if (other.tag == "Enemy")
+        {
+            other.SendMessage("DamageEnemy", meleePower, SendMessageOptions.DontRequireReceiver);
+        }
+        else if (other.tag == "SpecialItem")
+        {
+            specialItemCounter++;
+            specialItemCounterText.text = "x" + specialItemCounter;
+            other.gameObject.SetActive(false);
         }
 
         IInventoryItem item = other.GetComponent<IInventoryItem> ();
         if (item != null)
         {
             inventory.AddItem(item);
+            if (item.Name == "Speed")
+                speed = 3;
         }
+        disableMelee();
     }
 
     private void Restart()

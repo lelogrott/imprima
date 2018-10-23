@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MovingObject {
+public class Enemy : MonoBehaviour {
 
     public int playerDamage;
     public int enemyHealth;
-
+    public float chaseRange = 5f;
+    public float attackRange = .8f;
+    public float speed = .5f;
+    public float moveTime = 1f;
+    public float facingAngle;
+    public LayerMask blockingLayer;
+    public BoxCollider2D boxCollider;
     private Animator animator;
     private Transform target;
     private bool skipMove;
@@ -20,47 +26,65 @@ public class Enemy : MovingObject {
 
 
     // Use this for initialization
-    protected override void Start () {
+    void Start () {
         GameManager.instance.AddEnemyToList(this);
         animator = GetComponent<Animator>();
+        boxCollider = GetComponent<BoxCollider2D>();
         target = GameObject.FindGameObjectWithTag ("Player").transform;
-        base.Start();
 	}
 
-    protected override void AttemptMove<T>(int xDir, int yDir)
+    void FixedUpdate()
     {
-        if(skipMove || defeated)
-        {
-            skipMove = false;
-            return;
-        }
-        base.AttemptMove<T>(xDir, yDir);
+        MoveEnemy();
+    }
 
-        skipMove = true;
+    private void attack (RaycastHit2D obstacle)
+    {
+        Player hitPlayer = obstacle.transform.GetComponent<Player>();
+        animator.SetTrigger("enemyAttack");
+        hitPlayer.LoseFood(playerDamage);
+        SoundManager.instance.RandomizeSfx(enemyAttack1, enemyAttack2);
+    }
+
+    private void chaseTarget()
+    {
+        Vector3 targetDir = target.position - transform.position;
+        facingAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
+        flipEnemy(facingAngle);
+        transform.Translate(targetDir * Time.deltaTime * speed);
+    }
+
+    private void flipEnemy(float angle)
+    {
+        if (angle > -70f && angle < 70f)
+            GetComponent<SpriteRenderer>().flipX = true;
+        else
+            GetComponent<SpriteRenderer>().flipX = false;
+    }
+
+    private bool targetOnSight(out RaycastHit2D hit)
+    {
+        Vector2 start = transform.position;
+        Vector2 end = target.transform.position;
+        boxCollider.enabled = false;
+        hit = Physics2D.Linecast(start, end, blockingLayer);
+        boxCollider.enabled = true;
+
+        if (hit.transform.gameObject.tag == "Player") return true;
+        return false;
     }
 
     public void MoveEnemy()
     {
-        int xDir = 0;
-        int yDir = 0;
-
-        if (Mathf.Abs(target.position.x - transform.position.x) < float.Epsilon)
-            yDir = target.position.y > transform.position.y ? 1 : -1;
-        else
-            xDir = target.position.x > transform.position.x ? 1 : -1;
-
-        AttemptMove<Player>(xDir, yDir);
-    }
-
-    protected override void OnCantMove<T>(T component)
-    {
-        Player hitPlayer = component as Player;
-
-        animator.SetTrigger("enemyAttack");
-
-        hitPlayer.LoseFood(playerDamage);
-
-        SoundManager.instance.RandomizeSfx(enemyAttack1, enemyAttack2);
+        RaycastHit2D obstacle;
+        if (targetOnSight(out obstacle))
+        {
+            float distanceToTarget = Vector3.Distance(transform.position, target.position);
+            if (distanceToTarget <= attackRange)
+                attack(obstacle);
+            else if(distanceToTarget < chaseRange)
+                chaseTarget();        
+        }
     }
 
     public void DamageEnemy(int loss)

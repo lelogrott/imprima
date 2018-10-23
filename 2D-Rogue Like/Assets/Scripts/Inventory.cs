@@ -50,4 +50,14 @@ public class Inventory : MonoBehaviour {
 	{
 		return mItems;
 	}
+
+	public bool hasItem (string name)
+	{
+		Debug.LogWarning("searching for: " + name);
+		Debug.LogWarning("list items: " + mItems);
+		for (int i = 0; i < mItems.Count; i++)
+			if (mItems[i].Name == name)
+				return true;
+		return false;
+	}
 }
