@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
-// public class Player : MovingObject {
 
     public Inventory inventory;
     public int wallDamage = 1;
@@ -17,7 +16,7 @@ public class Player : MonoBehaviour {
     public float horizontal;
     public float vertical;
     public Text foodText;
-    public Text timeText;
+    public Text specialItemCounterText;
     public AudioClip moveSound1;
     public AudioClip moveSound2;
     public AudioClip eatSound1;
@@ -30,8 +29,8 @@ public class Player : MonoBehaviour {
     public float laserForce;
 
     private Animator animator;
+    private int specialItemCounter;
     private int food;
-    private float totalTime = 20f;
     private bool goingBack = false;
     private Vector2 lastMovement;
     private Rigidbody2D rb2d;
@@ -45,18 +44,19 @@ public class Player : MonoBehaviour {
         animator = GetComponent<Animator>();
         // Debug.LogWarning("entered player start");
         food = GameManager.instance.playerFoodPoints;
-        totalTime = GameManager.instance.totalTimeLeft;
+        specialItemCounter = GameManager.instance.specialItemCounter;
         inventory.setMItems(GameManager.instance.inventoryItems);
         rangedSource = transform.Find("RangedAttackSource");
         disableMelee();
         foodText.text = "Food: " + food;
+        specialItemCounterText.text = "x" + specialItemCounter;
 
 	}
 
     private void OnDisable()
     {
         GameManager.instance.playerFoodPoints = food;
-        GameManager.instance.totalTimeLeft = totalTime;
+        GameManager.instance.specialItemCounter = specialItemCounter;
         GameManager.instance.inventoryItems = new List<IInventoryItem> (inventory.getMItems());
         // check if player is going back to the previous room
         // if so, we need to decrease the level by 2, since we always increase it
@@ -98,21 +98,6 @@ public class Player : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (!GameManager.instance.getDoingSetup() && totalTime > 0)
-        {
-            totalTime -= Time.deltaTime;
-            if (totalTime < 0) totalTime = 0;
-            var coloredTime = "<color=#ff0000ff>" + totalTime.ToString("0.00") + "</color>";
-            
-            // use red color for time if its lower then 10 seconds left
-            if (totalTime < 10)
-                timeText.text = "Tempo: " + coloredTime;
-            else
-                timeText.text = "Tempo: " + totalTime.ToString("0.00");
-
-            CheckIfGameOver();
-        }
-
         if(Input.GetKeyDown("space"))
         {
             animator.SetTrigger("playerRanged");
@@ -192,6 +177,11 @@ public class Player : MonoBehaviour {
         else if (other.tag == "Enemy")
         {
             other.SendMessage("DamageEnemy", meleePower, SendMessageOptions.DontRequireReceiver);
+        }
+        else if (other.tag == "SpecialItem")
+        {
+            specialItemCounter++;
+            specialItemCounterText.text = "x" + specialItemCounter;
         }
 
         IInventoryItem item = other.GetComponent<IInventoryItem> ();

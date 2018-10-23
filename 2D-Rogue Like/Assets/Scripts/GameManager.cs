@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance = null;
     public BoardManager boardScript;
     public int playerFoodPoints = 100;
-    public float totalTimeLeft = 20f;
+    public int specialItemCounter = 0;
     [HideInInspector] public bool playersTurn = true;
     public List<IInventoryItem> inventoryItems = new List<IInventoryItem> ();
 	public Dictionary<int, string> boardDict = new Dictionary<int, string>();
