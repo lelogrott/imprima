@@ -24,7 +24,6 @@ public class Player : MonoBehaviour {
     public AudioClip drinkSound1;
     public AudioClip drinkSound2;
     public AudioClip gameOverSound;
-
     public GameObject Laser;
     public float laserForce;
 
@@ -35,7 +34,7 @@ public class Player : MonoBehaviour {
     private Vector2 lastMovement;
     private Rigidbody2D rb2d;
     private Transform rangedSource;
-
+    
 
 
     void Start () {
@@ -49,8 +48,9 @@ public class Player : MonoBehaviour {
         rangedSource = transform.Find("RangedAttackSource");
         disableMelee();
         foodText.text = "Food: " + food;
-
-	}
+        transform.position = GameManager.instance.playerStartPosition;
+        //Debug.Log(GameManager.instance.playerStartPosition);
+    }
 
     private void OnDisable()
     {
@@ -63,6 +63,10 @@ public class Player : MonoBehaviour {
         if (goingBack) 
             GameManager.instance.setLevel(GameManager.instance.getLevel() - 2);
         goingBack = false;
+        //playerStartPosition = rb2d.transform.position;
+        //Debug.Log(playerStartPosition);
+
+
     }
 
     void FixedUpdate ()
@@ -158,19 +162,33 @@ public class Player : MonoBehaviour {
             transform.Find("MeleeAttackSourceDown").GetComponent<Collider2D>().enabled = true;
     }
 
-    
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.tag == "Exit" || other.tag == "Back")
+        {
+           GameManager.instance.disableElevator = false;
+           //other.enabled = false;
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Exit")
+        if(other.tag == "Exit" || other.tag == "Back")
         {
-            Invoke("Restart", restartLevelDelay);
-            enabled = false;
-        }
-        else if(other.tag == "Back")
-        {
-            goingBack = true;
-            Invoke("Restart", restartLevelDelay);
-            enabled = false;
+            
+            if (!GameManager.instance.disableElevator)
+            {
+                if (other.tag == "Back")
+                {
+                    goingBack = true;
+                }
+                other.enabled = false;
+                Invoke("Restart", restartLevelDelay);
+                enabled = false;
+                
+                GameManager.instance.playerStartPosition = other.gameObject.transform.position;
+                GameManager.instance.disableElevator = true;
+            }
         }
         else if (other.tag == "Food")
         {

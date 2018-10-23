@@ -80,17 +80,20 @@ public class BoardManager : MonoBehaviour {
                 if (loop < 101)
                 {
                     //Debug.Log(index +" "+ newX + " " + newY);
-
-                    if (levels.layers[0].data[index] != 0)
+                    //Debug.Log(GameManager.instance.getLevel());
+                    int actualLevel = GameManager.instance.getLevel();
+                    int actualLevelBase = (actualLevel * 2) - 2;
+                    int actualLevelObjects = (actualLevel * 2) -1;
+                    if (levels.layers[actualLevelBase].data[index] != 0)
                     {
-                        GameObject toInstantiate = tilesetTiles[levels.layers[0].data[index]];
+                        GameObject toInstantiate = tilesetTiles[levels.layers[actualLevelBase].data[index]];
                         GameObject instance = Instantiate(toInstantiate, new Vector3(y, x, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
                     }
 
-                    if (levels.layers[1].data[index] != 0)
+                    if (levels.layers[actualLevelObjects].data[index] != 0)
                     {
-                        GameObject tileChoice = tilesetTiles[levels.layers[1].data[index]];
+                        GameObject tileChoice = tilesetTiles[levels.layers[actualLevelObjects].data[index]];
                         Instantiate(tileChoice, new Vector3(y, x, 0f), Quaternion.identity);
                         layoutObjects.Add(tileChoice);
                         layoutPositions.Add(new Vector3(y, x, 0f));
@@ -134,7 +137,7 @@ public class BoardManager : MonoBehaviour {
         InitialiseList();
         BoardSetup();
 		
-        if (GameManager.instance.boardDict.ContainsKey(level))
+        /*if (GameManager.instance.boardDict.ContainsKey(level))
         {
             loadMap(level);
         }
@@ -153,7 +156,7 @@ public class BoardManager : MonoBehaviour {
 			Instantiate (back, new Vector3 (0, rows - 1, 0F), Quaternion.identity);
 		// Instantiate (eye, new Vector3 (columns - 1, 0, 0F), Quaternion.identity);
 		// Instantiate (eye, new Vector3 (columns - 2, 0, 0F), Quaternion.identity);
-		LayoutObjectAtRandom(new GameObject[] {eye, laserWeapon, sonicBomb}, 3, 3);
+		LayoutObjectAtRandom(new GameObject[] {eye, laserWeapon, sonicBomb}, 3, 3);*/
 	}
 
 	public void saveCurrentMap() {
@@ -216,51 +219,4 @@ public class BoardManagerData {
 		this.layoutObjects = bm.layoutObjects;
 		this.layoutPositions = bm.layoutPositions;
 	}
-}
-
-public class LevelLayer
-{
-    public IList<int> data { get; set; }
-    public int height { get; set; }
-    public string name { get; set; }
-    public int opacity { get; set; }
-    public string type { get; set; }
-    public bool visible { get; set; }
-    public int width { get; set; }
-    public int x { get; set; }
-    public int y { get; set; }
-}
-
-public class LevelLayerGroup
-{
-    public IList<LevelLayer> layers { get; set; }
-    public string name { get; set; }
-    public int opacity { get; set; }
-    public string type { get; set; }
-    public bool visible { get; set; }
-    public int x { get; set; }
-    public int y { get; set; }
-}
-
-public class Tileset
-{
-    public int firstgid { get; set; }
-    public string source { get; set; }
-}
-
-public class Levels
-{
-    public int height { get; set; }
-    public bool infinite { get; set; }
-    public IList<LevelLayerGroup> layers { get; set; }
-    public int nextobjectid { get; set; }
-    public string orientation { get; set; }
-    public string renderorder { get; set; }
-    public string tiledversion { get; set; }
-    public int tileheight { get; set; }
-    public IList<Tileset> tilesets { get; set; }
-    public int tilewidth { get; set; }
-    public string type { get; set; }
-    public int version { get; set; }
-    public int width { get; set; }
 }

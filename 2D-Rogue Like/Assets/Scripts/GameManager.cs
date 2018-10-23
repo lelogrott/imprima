@@ -15,7 +15,8 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public bool playersTurn = true;
     public List<IInventoryItem> inventoryItems = new List<IInventoryItem> ();
 	public Dictionary<int, string> boardDict = new Dictionary<int, string>();
-
+    public Vector3 playerStartPosition = new Vector3(4, 0, 0f);
+    public bool disableElevator;
 
     private Text levelText;
     private GameObject levelImage;
@@ -25,7 +26,7 @@ public class GameManager : MonoBehaviour {
     private List<SonicBomb> bombs;
     private bool enemiesMoving;
     private bool doingSetup;
-
+    
     // Use this for initialization
     void Awake() {
         if (instance == null)
