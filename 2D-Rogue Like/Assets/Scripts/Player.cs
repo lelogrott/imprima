@@ -172,7 +172,8 @@ public class Player : MonoBehaviour {
         }
         else if (other.tag == "Wall")
         {
-            other.SendMessage("DamageWall", wallDamage, SendMessageOptions.DontRequireReceiver);
+            if (inventory.hasItem("Strength"))
+                other.SendMessage("DamageWall", wallDamage, SendMessageOptions.DontRequireReceiver);
         }
         else if (other.tag == "Enemy")
         {
@@ -188,6 +189,8 @@ public class Player : MonoBehaviour {
         if (item != null)
         {
             inventory.AddItem(item);
+            if (item.Name == "Speed")
+                speed = 3;
         }
         disableMelee();
     }

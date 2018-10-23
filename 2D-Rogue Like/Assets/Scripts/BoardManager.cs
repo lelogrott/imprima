@@ -27,6 +27,7 @@ public class BoardManager : MonoBehaviour {
 	public GameObject exit;
 	public GameObject back;
 	public GameObject eye;
+	public GameObject sound;
 	public GameObject laserWeapon;
 	public GameObject sonicBomb;
 	public GameObject[] floorTiles;
@@ -129,7 +130,7 @@ public class BoardManager : MonoBehaviour {
 			Instantiate (back, new Vector3 (0, rows - 1, 0F), Quaternion.identity);
 		// Instantiate (eye, new Vector3 (columns - 1, 0, 0F), Quaternion.identity);
 		// Instantiate (eye, new Vector3 (columns - 2, 0, 0F), Quaternion.identity);
-		LayoutObjectAtRandom(new GameObject[] {eye, laserWeapon, sonicBomb}, 3, 3);
+		LayoutObjectAtRandom(new GameObject[] {sonicBomb, sound}, 2, 2);
 	}
 
 	public void saveCurrentMap() {
