@@ -12,6 +12,7 @@ public class Inventory : MonoBehaviour {
 
 	public void AddItem(IInventoryItem item)
 	{
+		if (hasItem(item.Name)) return;
 		// Debug.LogWarning(">> inventory add item");
 		if (mItems.Count < SLOTS)
 		{
