@@ -13,7 +13,6 @@ public class Inventory : MonoBehaviour {
 	public void AddItem(IInventoryItem item)
 	{
         if (hasItem(item.Name)) return;
-        // Debug.LogWarning(">> inventory add item");
         if (mItems.Count < SLOTS)
 		{
 			Collider2D collider = (item as MonoBehaviour).GetComponent<Collider2D>();
@@ -21,10 +20,10 @@ public class Inventory : MonoBehaviour {
 			// if (collider.enabled)
 			if (true)
 			{
-				// Debug.LogWarning(">> adding item - total items before: " + mItems.Count);			
+				Debug.LogWarning(">> adding item - total items before: " + mItems.Count);			
 				collider.enabled = false;
 				mItems.Add(item);
-				// Debug.LogWarning(">> total items after: " + mItems.Count);			
+				Debug.LogWarning(">> total items after: " + mItems.Count);			
 				item.OnPickup();
 
 				if (ItemAdded != null)

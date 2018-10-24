@@ -42,6 +42,7 @@ public class Player : MonoBehaviour {
         // Debug.LogWarning("entered player start");
         food = GameManager.instance.playerFoodPoints;
         specialItemCounter = GameManager.instance.specialItemCounter;
+        Debug.LogWarning(inventory.getMItems().Count);
         inventory.setMItems(GameManager.instance.inventoryItems);
         rangedSource = transform.Find("RangedAttackSource");
         disableMelee();
@@ -55,7 +56,9 @@ public class Player : MonoBehaviour {
     {
         GameManager.instance.playerFoodPoints = food;
         GameManager.instance.specialItemCounter = specialItemCounter;
+        Debug.LogWarning("setting gm inventory. b4: " + GameManager.instance.inventoryItems.Count);
         GameManager.instance.inventoryItems = new List<IInventoryItem> (inventory.getMItems());
+        Debug.LogWarning("setting gm inventory. now: " + GameManager.instance.inventoryItems.Count);
         // check if player is going back to the previous room
         // if so, we need to decrease the level by 2, since we always increase it
         // by one at the beginning
@@ -141,33 +144,15 @@ public class Player : MonoBehaviour {
             transform.Find("MeleeAttackSourceDown").GetComponent<Collider2D>().enabled = true;
     }
 
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.tag == "Exit" || other.tag == "Back")
-        {
-           GameManager.instance.disableElevator = false;
-           //other.enabled = false;
-        }
-    }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "Exit" || other.tag == "Back")
         {
-            
-            if (!GameManager.instance.disableElevator)
-            {
-                if (other.tag == "Back")
-                {
-                    goingBack = true;
-                }
-                other.enabled = false;
-                Invoke("Restart", restartLevelDelay);
-                enabled = false;
-                
-                GameManager.instance.playerStartPosition = other.gameObject.transform.position;
-                GameManager.instance.disableElevator = true;
-            }
+            if (other.tag == "Back")
+                goingBack = true;
+
+            Invoke("Restart", restartLevelDelay);
+            GameManager.instance.playerStartPosition = other.gameObject.transform.position;
         }
         else if (other.tag == "Food")
         {

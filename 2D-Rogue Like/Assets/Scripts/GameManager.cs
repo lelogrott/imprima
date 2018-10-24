@@ -13,10 +13,9 @@ public class GameManager : MonoBehaviour {
     public int playerFoodPoints = 100;
     public int specialItemCounter = 0;
     [HideInInspector] public bool playersTurn = true;
-    public List<IInventoryItem> inventoryItems = new List<IInventoryItem> ();
+    public List<IInventoryItem> inventoryItems = new List<IInventoryItem>();
 	public Dictionary<int, string> boardDict = new Dictionary<int, string>();
     public Vector3 playerStartPosition = new Vector3(4, 0, 0f);
-    public bool disableElevator;
 
     private Text levelText;
     private GameObject levelImage;

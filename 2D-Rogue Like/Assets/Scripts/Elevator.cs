@@ -14,10 +14,8 @@ public class Elevator : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (PlayerDistance() < distanceToActivate)
-        {
+		if (PlayerDistance() > distanceToActivate)
             GetComponent<Collider2D>().enabled = true;
-        }
 	}
 
 	private float PlayerDistance()
