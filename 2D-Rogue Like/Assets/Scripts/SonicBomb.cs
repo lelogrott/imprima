@@ -12,7 +12,7 @@ public class SonicBomb : MonoBehaviour {
     private Transform target;
     private bool defeated = false;
 	private float timer = 0f;
-
+    
     // Use this for initialization
     public void Start ()
 	{
@@ -20,19 +20,22 @@ public class SonicBomb : MonoBehaviour {
         target = GameObject.FindGameObjectWithTag ("Player").transform;
 		audio = gameObject.GetComponent<AudioSource>();
 		audio.clip = bombSound;
-	}
+        
+    }
 
 	void Update ()
 	{
 		timer += Time.deltaTime;
 		double distance = Math.Sqrt(Math.Pow(transform.position.x - target.position.x, 2) + Math.Pow(transform.position.y - target.position.y, 2));
-		// Debug.LogWarning("distancia: " + distance);
+		//Debug.LogWarning("distancia: " + distance);
 		double beepPitch = 1/(1 + distance);
-		// Debug.LogWarning("pitch: " + beepPitch);
-		// Debug.LogWarning(">> timer: " + timer);
-		if (timer > 0.1)
+        // Debug.LogWarning("pitch: " + beepPitch);
+        // Debug.LogWarning(">> timer: " + timer);
+        audio.volume = 0.8f - (float)distance / 3;
+        //if (distance
+        if (timer > 0.1)
 		{
-			audio.pitch = (float) ( 20 * beepPitch);
+			audio.pitch = (float) ( 10 * beepPitch);
 			timer = 0;
 		}
 	}
