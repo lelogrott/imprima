@@ -12,8 +12,9 @@ public class Inventory : MonoBehaviour {
 
 	public void AddItem(IInventoryItem item)
 	{
-		// Debug.LogWarning(">> inventory add item");
-		if (mItems.Count < SLOTS)
+        if (hasItem(item.Name)) return;
+        // Debug.LogWarning(">> inventory add item");
+        if (mItems.Count < SLOTS)
 		{
 			Collider2D collider = (item as MonoBehaviour).GetComponent<Collider2D>();
 			// Debug.LogWarning(">> slots available -> item: " + collider.enabled);			

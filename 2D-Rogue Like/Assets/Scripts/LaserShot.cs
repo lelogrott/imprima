@@ -9,7 +9,7 @@ public class LaserShot : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Food" || other.tag == "Soda") return;
+        if (other.tag == "Food" || other.tag == "Soda" || other.tag == "Exit" || other.tag == "Back" || other.tag == "RedTile") return;
 
         if (other.tag == "Wall") other.SendMessage("DamageWall", damage, SendMessageOptions.DontRequireReceiver);
 

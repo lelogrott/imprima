@@ -34,8 +34,6 @@ public class Player : MonoBehaviour {
     private bool goingBack = false;
     private Rigidbody2D rb2d;
     private Transform rangedSource;
-    
-
 
     void Start () {
         rb2d = GetComponent<Rigidbody2D> ();
