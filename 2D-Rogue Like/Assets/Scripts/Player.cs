@@ -27,6 +27,7 @@ public class Player : MonoBehaviour {
     public GameObject Laser;
     public float laserForce;
 
+    private bool invencible;
     private Animator animator;
     private int specialItemCounter;
     private int food;
@@ -217,10 +218,34 @@ public class Player : MonoBehaviour {
 
     public void LoseFood(int loss)
     {
-        animator.SetTrigger("playerHit");
-        food -= loss;
-        foodText.text = "-" + loss + " Food: " + food;
-        CheckIfGameOver();
+        if (!invencible)
+        {
+            animator.SetTrigger("playerHit");
+            food -= loss;
+            foodText.text = "-" + loss + " Food: " + food;
+            CheckIfGameOver();
+            StartCoroutine(setInvencible());
+       }
+        
+    }
+
+    IEnumerator setInvencible()
+    {
+        Debug.Log(invencible);
+        invencible = true;
+        this.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 0f, 1.0f, 0.5f);
+        yield return new WaitForSeconds(0.2f);
+        this.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 0f, 1.0f, 1f);
+        yield return new WaitForSeconds(0.2f);
+        this.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+        yield return new WaitForSeconds(0.2f);
+        this.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 1f);
+        yield return new WaitForSeconds(0.2f);
+        this.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+        yield return new WaitForSeconds(0.2f);
+        this.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 1f);
+        yield return new WaitForSeconds(0.2f);
+        invencible = false;
     }
 
     private void CheckIfGameOver()

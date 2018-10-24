@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour {
 
     public AudioClip chopSound1;
     public AudioClip chopSound2;
-
+    private bool cantAtack;
 
 
     // Use this for initialization
@@ -40,10 +40,21 @@ public class Enemy : MonoBehaviour {
 
     private void attack (RaycastHit2D obstacle)
     {
-        Player hitPlayer = obstacle.transform.GetComponent<Player>();
-        animator.SetTrigger("enemyAttack");
-        hitPlayer.LoseFood(playerDamage);
-        SoundManager.instance.RandomizeSfx(enemyAttack1, enemyAttack2);
+        if (!cantAtack)
+        {
+            Player hitPlayer = obstacle.transform.GetComponent<Player>();
+            animator.SetTrigger("enemyAttack");
+            hitPlayer.LoseFood(playerDamage);
+            SoundManager.instance.RandomizeSfx(enemyAttack1, enemyAttack2);
+            StartCoroutine(waitToAtack());
+        }
+    }
+
+    IEnumerator waitToAtack()
+    {
+        cantAtack = true;
+        yield return new WaitForSeconds(1f);
+        cantAtack = false;
     }
 
     private void chaseTarget()
@@ -95,6 +106,7 @@ public class Enemy : MonoBehaviour {
         {
             defeated = true;
             gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 }

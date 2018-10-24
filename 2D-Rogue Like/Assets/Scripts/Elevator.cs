@@ -10,12 +10,16 @@ public class Elevator : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag ("Player").transform;
+        Debug.Log("HERE");
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (PlayerDistance() < distanceToActivate)
-			GetComponent<Collider2D>().enabled = true;
+        {
+            GetComponent<Collider2D>().enabled = true;
+            Debug.Log("enabled");
+        }
 	}
 
 	private float PlayerDistance()
