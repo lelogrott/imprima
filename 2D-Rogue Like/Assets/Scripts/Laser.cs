@@ -76,7 +76,7 @@ public class Laser : MonoBehaviour {
         {
 			if (hit.collider.tag == "Player")
             {
-				hit.collider.gameObject.GetComponent<Player>().LoseFood(10);
+				hit.collider.gameObject.GetComponent<Player>().GetDamage();
 			}
         }
 	}

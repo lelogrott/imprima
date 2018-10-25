@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 public class Inventory : MonoBehaviour {
@@ -9,17 +10,15 @@ public class Inventory : MonoBehaviour {
 	private List<IInventoryItem> mItems = new List<IInventoryItem> ();
 
 	public event EventHandler<InventoryEventArgs> ItemAdded;
-	public event EventHandler<InventoryEventArgs> ItemRemoved;
 
 	public void AddItem(IInventoryItem item)
 	{
         if (hasItem(item.Name)) return;
+	
         if (mItems.Count < SLOTS)
 		{
 			Collider2D collider = (item as MonoBehaviour).GetComponent<Collider2D>();
-			// Debug.LogWarning(">> slots available -> item: " + collider.enabled);			
-			// if (collider.enabled)
-			if (true)
+			if (collider.enabled)
 			{
 				Player player = GameObject.Find("Player").GetComponent<Player>();
 				player.ApplyPowerUp(item.Name);
@@ -62,13 +61,31 @@ public class Inventory : MonoBehaviour {
 		return false;
 	}
 
-	public bool removeLastAdded() {
+	public bool removeLastAdded()
+	{
+		string itemRemoved = "";
 		int totalItems = mItems.Count;
 		if (totalItems != 0)
 		{
 			int lastItemIndex = mItems.Count - 1;
-			IInventoryItem item = mItems[lastItemIndex];
-			ItemRemoved(this, new InventoryEventArgs(item));
+			Transform inventoryPanel = GameObject.Find("Inventory").transform;
+			
+			foreach (Transform slot in inventoryPanel)
+			{
+				Image image = slot.GetChild(0).GetChild(0).GetComponent<Image>();
+				if (image.sprite == mItems[lastItemIndex].Image)
+				{
+					image.sprite = null;
+					image.enabled = false;
+					break;
+				}
+			}
+			itemRemoved = mItems[lastItemIndex].Name;
+			mItems.RemoveAt(lastItemIndex);
+
+			Player player = GameObject.Find("Player").GetComponent<Player>();
+			player.RemovePowerUp(itemRemoved);
+
 			return true;
 		}
 		return false;

@@ -47,7 +47,7 @@ public class SonicBomb : MonoBehaviour {
     {
         if(other.tag == "Player")
         {
-            other.gameObject.GetComponent<Player>().LoseFood(playerDamage);
+            other.gameObject.GetComponent<Player>().GetDamage();
 			gameObject.SetActive(false);
         }
 	}

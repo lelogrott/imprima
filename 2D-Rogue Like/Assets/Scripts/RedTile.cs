@@ -26,7 +26,7 @@ public class RedTile : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
-            other.gameObject.GetComponent<Player>().LoseFood(10);
+            other.gameObject.GetComponent<Player>().GetDamage();
         }
     }
 }

@@ -45,6 +45,7 @@ public class Player : MonoBehaviour {
     private bool goingBack = false;
     private Rigidbody2D rb2d;
     private Transform rangedSource;
+    private bool stillAlive = true;
 
     void Start () {
         rb2d = GetComponent<Rigidbody2D> ();
@@ -53,7 +54,6 @@ public class Player : MonoBehaviour {
         // Debug.LogWarning("entered player start");
         food = GameManager.instance.playerFoodPoints;
         specialItemCounter = GameManager.instance.specialItemCounter;
-        Debug.LogWarning(inventory.getMItems().Count);
         inventory.setMItems(GameManager.instance.inventoryItems);
         rangedSource = transform.Find("RangedAttackSource");
         disableMelee();
@@ -67,21 +67,20 @@ public class Player : MonoBehaviour {
     {
         GameManager.instance.playerFoodPoints = food;
         GameManager.instance.specialItemCounter = specialItemCounter;
-        // Debug.LogWarning("setting gm inventory. b4: " + GameManager.instance.inventoryItems.Count);
         GameManager.instance.inventoryItems = new List<IInventoryItem> (inventory.getMItems());
-        // Debug.LogWarning("setting gm inventory. now: " + GameManager.instance.inventoryItems.Count);
+
         // check if player is going back to the previous room
         // if so, we need to decrease the level by 2, since we always increase it
         // by one at the beginning
         if (goingBack) 
             GameManager.instance.setLevel(GameManager.instance.getLevel() - 2);
         goingBack = false;
-        //playerStartPosition = rb2d.transform.position;
-        //Debug.Log(playerStartPosition);
     }
 
     void FixedUpdate ()
     {
+        if (!stillAlive)
+            GameOver();
         horizontal = Input.GetAxisRaw("Horizontal") * speed;
         vertical = Input.GetAxisRaw("Vertical") * speed;
         if (horizontal < 0)
@@ -112,18 +111,17 @@ public class Player : MonoBehaviour {
     void Update () {
         if (SpeedPowerUp && speed == 2)
             speed = 3;
+        else if (!SpeedPowerUp && speed == 3)
+            speed = 2;
         if(Input.GetKeyDown("space"))
         {
             animator.SetTrigger("playerRanged");
-            CheckIfGameOver();
             fireLaser();
         }
         if(Input.GetKeyDown("q"))
         {
             animator.SetTrigger("playerChop");
-            CheckIfGameOver();
             meleeAttack();
-            // disableMelee();
         }
 	}
 
@@ -224,24 +222,19 @@ public class Player : MonoBehaviour {
         SceneManager.LoadScene(0);
     }
 
-    public void LoseFood(int loss)
+    public void GetDamage()
     {
         if (!invencible)
         {
             animator.SetTrigger("playerHit");
-            food -= loss;
-            foodText.text = "-" + loss + " Food: " + food;
-            /*bool morreu = inventory.removeLastAdded();
-            if (morreu)
-                foodText.text = ">>>> morreu <<<<";*/
-            CheckIfGameOver();
+            stillAlive = inventory.removeLastAdded();
             StartCoroutine(setInvencible());
        }
         
     }
 
     public void ApplyPowerUp (string power)
-    {   Debug.LogWarning(power);
+    {
         switch(power)
         {
             case "Eye":
@@ -257,7 +250,6 @@ public class Player : MonoBehaviour {
                 HaveSpeedPowerUp = true;
                 break;
             case "Strength":
-                Debug.LogWarning("settingPowerUp");
                 StrengthPowerUp = true;
                 HaveStrengthPowerUp = true;
                 break;
@@ -266,9 +258,29 @@ public class Player : MonoBehaviour {
         }	
     }
 
+    public void RemovePowerUp (string power)
+    {
+        switch(power)
+        {
+            case "Eye":
+                VisionPowerUp = false;
+                break;
+            case "Sound":
+                SoundPowerUp = false;
+                break;
+            case "Speed":
+                SpeedPowerUp = false;
+                break;
+            case "Strength":
+                StrengthPowerUp = false;
+                break;
+            default:
+                break;
+        }	
+    }
+
     IEnumerator setInvencible()
     {
-        Debug.Log(invencible);
         invencible = true;
         this.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 0f, 1.0f, 0.5f);
         yield return new WaitForSeconds(0.2f);
@@ -285,20 +297,10 @@ public class Player : MonoBehaviour {
         invencible = false;
     }
 
-    private void CheckIfGameOver()
+    private void GameOver()
     {
-        // if (food <= 0) // if the food is over
-        // {
-        //     SoundManager.instance.PlaySingle(gameOverSound);
-        //     SoundManager.instance.musicSource.Stop();
-        //     GameManager.instance.GameOver("Food");
-        // }
-        // else if (!(totalTime > 0)) // if there is no time left
-        // {
-        //     SoundManager.instance.PlaySingle(gameOverSound);
-        //     SoundManager.instance.musicSource.Stop();
-        //     GameManager.instance.GameOver("Time");
-        // }
-            
+        SoundManager.instance.PlaySingle(gameOverSound);
+        SoundManager.instance.musicSource.Stop();
+        GameManager.instance.GameOver();       
     }
 }

@@ -43,8 +43,8 @@ public class Enemy : MonoBehaviour {
         {
             Player hitPlayer = obstacle.transform.GetComponent<Player>();
             animator.SetTrigger("enemyAttack");
-            hitPlayer.LoseFood(playerDamage);
             SoundManager.instance.RandomizeSfx(enemyAttack1, enemyAttack2);
+            hitPlayer.GetDamage();
             StartCoroutine(waitToAtack());
         }
     }

@@ -72,24 +72,11 @@ public class GameManager : MonoBehaviour {
         doingSetup = false;
     }
 
-    public void GameOver(string reason)
+    public void GameOver()
     {
-        
-        switch (reason)
-        {
-            case "Food":
-                levelText.text = "After " + level + " days, you starved.";
-                levelImage.SetActive(true);
-                enabled = false;
-                break;
-            case "Time":
-                levelText.text = "Acabou o tempo!\nVocê foi pego!";
-                levelImage.SetActive(true);
-                enabled = false;
-                break;
-        }
-
-        
+        levelText.text = "Você morreu!";
+        levelImage.SetActive(true);
+        enabled = false;
     }
 	
 	// Update is called once per frame
