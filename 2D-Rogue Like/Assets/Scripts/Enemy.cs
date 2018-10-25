@@ -27,7 +27,6 @@ public class Enemy : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        GameManager.instance.AddEnemyToList(this);
         animator = GetComponent<Animator>();
         boxCollider = GetComponent<BoxCollider2D>();
         target = GameObject.FindGameObjectWithTag ("Player").transform;

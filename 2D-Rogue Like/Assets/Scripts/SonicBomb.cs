@@ -17,7 +17,6 @@ public class SonicBomb : MonoBehaviour {
     // Use this for initialization
     public void Start ()
 	{
-        GameManager.instance.AddBombToList(this);
         target = GameObject.Find("Player").transform;
 		audio = gameObject.GetComponent<AudioSource>();
         audio.mute = true;

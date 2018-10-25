@@ -21,8 +21,6 @@ public class GameManager : MonoBehaviour {
     private GameObject levelImage;
     private int level = 1;
     private int maxLevel = 10;
-    private List<Enemy> enemies;
-    private List<SonicBomb> bombs;
     private bool enemiesMoving;
     private bool doingSetup;
     
@@ -34,8 +32,6 @@ public class GameManager : MonoBehaviour {
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
-        enemies = new List<Enemy>();
-        bombs = new List<SonicBomb>();
         boardScript = GetComponent<BoardManager>();
         // InitGame();
     }
@@ -66,9 +62,7 @@ public class GameManager : MonoBehaviour {
         levelText.text = level + "° andar";
         levelImage.SetActive(true);
         Invoke("HideLevelImage", levelStartDelay);
-       
-        enemies.Clear();
-        bombs.Clear();
+
         boardScript.SetupScene(level);
     }
 
@@ -100,40 +94,9 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        if (enemiesMoving || doingSetup)
+        if (doingSetup)
             return;
-        playersTurn = true;
-        StartCoroutine(MoveEnemies());
 	}
-
-    public void AddEnemyToList(Enemy script)
-    {
-        enemies.Add(script);
-    }
-    public void AddBombToList(SonicBomb script)
-    {
-        bombs.Add(script);
-    }
-
-    IEnumerator MoveEnemies()
-    {
-        enemiesMoving = true;
-        yield return new WaitForSeconds(0.05f);
-        // yield return new WaitForSeconds(0.0f);
-        if(enemies.Count == 0)
-        {
-            yield return new WaitForSeconds(0.05f);
-        }
-
-        for(int i = 0; i < enemies.Count; i++)
-        {
-            enemies[i].MoveEnemy();
-            yield return new WaitForSeconds(enemies[i].moveTime);
-        }
-
-        playersTurn = true;
-        enemiesMoving = false;
-    }
 
     public int getLevel()
     {
