@@ -4,24 +4,20 @@ using UnityEngine;
 
 public class RedTile : MonoBehaviour {
 
-    private GameObject player;
+    private Player player;
     // Use this for initialization
     void Start () {
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.Find("Player").GetComponent<Player>();
     }
 	
 	// Update is called once per frame
 	void Update () {
         if (this.enabled && player != null)
         {
-            if (player.GetComponent<Player>().inventory.hasItem("Eye"))
-            {
+            if (player.VisionPowerUp)
                 this.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 1f);
-            }
             else
-            {
                 this.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0f);
-            }
         }
         
     }
@@ -30,7 +26,6 @@ public class RedTile : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
-            Debug.Log("enconstou");
             other.gameObject.GetComponent<Player>().LoseFood(10);
         }
     }
