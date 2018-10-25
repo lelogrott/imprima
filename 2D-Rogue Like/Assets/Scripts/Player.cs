@@ -33,11 +33,6 @@ public class Player : MonoBehaviour {
     public bool SpeedPowerUp = false;
     public bool SoundPowerUp = false;
 
-    public bool HaveStrengthPowerUp = false;
-    public bool HaveVisionPowerUp = false;
-    public bool HaveSpeedPowerUp = false;
-    public bool HaveSoundPowerUp = false;
-
     private bool invencible;
     private Animator animator;
     private int specialItemCounter;
@@ -196,18 +191,14 @@ public class Player : MonoBehaviour {
         }
         else if (other.tag == "Reprinter")
         {
-            //CRIA o ARRAY DE ALGUMA FORMA AQUI
-
-            /*foreach (IInventoryItem currentItem in items)
+            List<IInventoryItem> brokenItems = inventory.getBrokenItems();
+            if (brokenItems.Count > 0 && specialItemCounter > 0)
             {
-                if (!inventory.hasItem(currentItem.Name) && specialItemCounter > 0 && HaveVisionPowerUp)
-                {
-                    specialItemCounter--;
-                    inventory.AddItem(currentItem);
-                }
-            }*/
-            
-            
+                int randomIndex = Random.Range (0, brokenItems.Count);
+                inventory.AddItem(brokenItems[randomIndex]);
+                specialItemCounter--;
+                specialItemCounterText.text = "x" + specialItemCounter;
+            }
         }
         IInventoryItem item = other.GetComponent<IInventoryItem> ();
         if (item != null)
@@ -239,19 +230,15 @@ public class Player : MonoBehaviour {
         {
             case "Eye":
                 VisionPowerUp = true;
-                HaveVisionPowerUp = true;
                 break;
             case "Sound":
                 SoundPowerUp = true;
-                HaveSoundPowerUp = true;
                 break;
             case "Speed":
                 SpeedPowerUp = true;
-                HaveSpeedPowerUp = true;
                 break;
             case "Strength":
                 StrengthPowerUp = true;
-                HaveStrengthPowerUp = true;
                 break;
             default:
                 break;

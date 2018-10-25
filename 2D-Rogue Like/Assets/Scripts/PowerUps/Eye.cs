@@ -23,6 +23,7 @@ public class Eye : MonoBehaviour, IInventoryItem {
 
 	public void OnPickup()
 	{
-		gameObject.SetActive(false);
+		if (gameObject != null)
+			gameObject.SetActive(false);
 	}
 }

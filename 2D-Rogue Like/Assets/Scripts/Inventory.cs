@@ -8,7 +8,7 @@ public class Inventory : MonoBehaviour {
 
 	private const int SLOTS = 4;
 	private List<IInventoryItem> mItems = new List<IInventoryItem> ();
-
+	private List<IInventoryItem> brokenItems = new List<IInventoryItem> ();
 	public event EventHandler<InventoryEventArgs> ItemAdded;
 
 	public void AddItem(IInventoryItem item)
@@ -17,19 +17,17 @@ public class Inventory : MonoBehaviour {
 	
         if (mItems.Count < SLOTS)
 		{
-			Collider2D collider = (item as MonoBehaviour).GetComponent<Collider2D>();
-			if (collider.enabled)
-			{
-				Player player = GameObject.Find("Player").GetComponent<Player>();
-				player.ApplyPowerUp(item.Name);
-				collider.enabled = false;
-				mItems.Add(item);		
+			Player player = GameObject.Find("Player").GetComponent<Player>();
+			player.ApplyPowerUp(item.Name);
+			mItems.Add(item);
+			if (hasBrokenItem(item))
+				brokenItems.Remove(item);
+			if (!item.Equals(null))
 				item.OnPickup();
 
-				if (ItemAdded != null)
-				{
-					ItemAdded(this, new InventoryEventArgs(item));
-				}
+			if (ItemAdded != null)
+			{
+				ItemAdded(this, new InventoryEventArgs(item));
 			}
 		}
 	}
@@ -53,10 +51,23 @@ public class Inventory : MonoBehaviour {
 		return mItems;
 	}
 
+	public List<IInventoryItem> getBrokenItems()
+	{
+		return brokenItems;
+	}
+
 	public bool hasItem (string name)
 	{
 		for (int i = 0; i < mItems.Count; i++)
 			if (mItems[i].Name == name)
+				return true;
+		return false;
+	}
+
+	public bool hasBrokenItem (IInventoryItem item)
+	{
+		for (int i = 0; i < brokenItems.Count; i++)
+			if (brokenItems[i] == item)
 				return true;
 		return false;
 	}
@@ -81,6 +92,7 @@ public class Inventory : MonoBehaviour {
 				}
 			}
 			itemRemoved = mItems[lastItemIndex].Name;
+			brokenItems.Add(mItems[lastItemIndex]);
 			mItems.RemoveAt(lastItemIndex);
 
 			Player player = GameObject.Find("Player").GetComponent<Player>();
