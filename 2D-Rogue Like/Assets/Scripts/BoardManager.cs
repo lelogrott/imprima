@@ -24,7 +24,6 @@ public class BoardManager : MonoBehaviour {
 	public int columns = 8;
 	public int rows = 8;
 	public Count wallCount = new Count (5, 9);
-	public Count foodCount = new Count (1, 5);
 	public GameObject exit;
 	public GameObject back;
 	public GameObject eye;
@@ -32,7 +31,6 @@ public class BoardManager : MonoBehaviour {
 	public GameObject sonicBomb;
 	public GameObject[] floorTiles;
 	public GameObject[] wallTiles;
-	public GameObject[] foodTiles;
 	public GameObject[] enemyTiles;
 	public GameObject[] outerWallsTiles;
     public GameObject[] tilesetTiles;
@@ -137,27 +135,6 @@ public class BoardManager : MonoBehaviour {
         LoadGameMaps();
         InitialiseList();
         BoardSetup();
-		
-        /*if (GameManager.instance.boardDict.ContainsKey(level))
-        {
-            loadMap(level);
-        }
-		else
-		{
-			LayoutObjectAtRandom (wallTiles, wallCount.minimum, wallCount.maximum);
-			LayoutObjectAtRandom (foodTiles, foodCount.minimum, foodCount.maximum);
-			int enemyCount = (int)Mathf.Log (level, 2f);
-			enemyCount = 3;
-			//LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
-		}
-		saveCurrentMap();
-		if (level < GameManager.instance.getMaxLevel())
-			Instantiate (exit, new Vector3 (columns - 1, rows - 1, 0F), Quaternion.identity);
-		if (level > 1)
-			Instantiate (back, new Vector3 (0, rows - 1, 0F), Quaternion.identity);
-		// Instantiate (eye, new Vector3 (columns - 1, 0, 0F), Quaternion.identity);
-		// Instantiate (eye, new Vector3 (columns - 2, 0, 0F), Quaternion.identity);
-		LayoutObjectAtRandom(new GameObject[] {eye, laserWeapon, sonicBomb}, 3, 3);*/
 	}
 
 	public void saveCurrentMap() {

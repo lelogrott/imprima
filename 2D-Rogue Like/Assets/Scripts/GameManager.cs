@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour {
     public float turnDelay = 0.0f;
     public static GameManager instance = null;
     public BoardManager boardScript;
-    public int playerFoodPoints = 100;
     public int specialItemCounter = 0;
     [HideInInspector] public bool playersTurn = true;
     public List<IInventoryItem> inventoryItems = new List<IInventoryItem>();

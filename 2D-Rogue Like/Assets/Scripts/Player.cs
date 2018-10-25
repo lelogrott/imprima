@@ -8,14 +8,11 @@ public class Player : MonoBehaviour {
 
     public Inventory inventory;
     public int wallDamage = 1;
-    public int pointsPerFood = 10;
-    public int pointsPerSoda = 20;
     public int meleePower = 1;
     public float restartLevelDelay = 1f;
     public float speed = 2;
     public float horizontal;
     public float vertical;
-    public Text foodText;
     public Text specialItemCounterText;
     public AudioClip moveSound1;
     public AudioClip moveSound2;
@@ -36,7 +33,6 @@ public class Player : MonoBehaviour {
     private bool invencible;
     private Animator animator;
     private int specialItemCounter;
-    private int food;
     private bool goingBack = false;
     private Rigidbody2D rb2d;
     private Transform rangedSource;
@@ -47,12 +43,10 @@ public class Player : MonoBehaviour {
         rb2d.freezeRotation = true;
         animator = GetComponent<Animator>();
         // Debug.LogWarning("entered player start");
-        food = GameManager.instance.playerFoodPoints;
         specialItemCounter = GameManager.instance.specialItemCounter;
         inventory.setMItems(GameManager.instance.inventoryItems);
         rangedSource = transform.Find("RangedAttackSource");
         disableMelee();
-        foodText.text = "Food: " + food;
         transform.position = GameManager.instance.playerStartPosition;
         specialItemCounterText.text = "x" + specialItemCounter;
         //Debug.Log(GameManager.instance.playerStartPosition);
@@ -60,7 +54,6 @@ public class Player : MonoBehaviour {
 
     private void OnDisable()
     {
-        GameManager.instance.playerFoodPoints = food;
         GameManager.instance.specialItemCounter = specialItemCounter;
         GameManager.instance.inventoryItems = new List<IInventoryItem> (inventory.getMItems());
 
@@ -159,20 +152,6 @@ public class Player : MonoBehaviour {
 
             Invoke("Restart", restartLevelDelay);
             GameManager.instance.playerStartPosition = other.gameObject.transform.position;
-        }
-        else if (other.tag == "Food")
-        {
-            food += pointsPerFood;
-            foodText.text = "+" + pointsPerFood + " Food: " + food;
-            SoundManager.instance.RandomizeSfx(eatSound1, eatSound2);
-            other.gameObject.SetActive(false);
-        }
-        else if (other.tag == "Soda")
-        {
-            food += pointsPerSoda;
-            foodText.text = "+" + pointsPerSoda + " Food: " + food;
-            SoundManager.instance.RandomizeSfx(drinkSound1, drinkSound2);
-            other.gameObject.SetActive(false);
         }
          else if (other.tag == "Wall")
         {
