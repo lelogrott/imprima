@@ -7,6 +7,7 @@ public class SonicBomb : MonoBehaviour {
 
     public int playerDamage;
     public int health;
+    public float distanceToPlay = 2.5f;
 	public AudioClip bombSound;
 	private AudioSource audio;
     private Transform target;
@@ -17,16 +18,19 @@ public class SonicBomb : MonoBehaviour {
     public void Start ()
 	{
         GameManager.instance.AddBombToList(this);
-        target = GameObject.FindGameObjectWithTag ("Player").transform;
+        target = GameObject.Find("Player").transform;
 		audio = gameObject.GetComponent<AudioSource>();
+        audio.mute = true;
 		audio.clip = bombSound;
         
     }
 
 	void Update ()
 	{
-		timer += Time.deltaTime;
-		double distance = Math.Sqrt(Math.Pow(transform.position.x - target.position.x, 2) + Math.Pow(transform.position.y - target.position.y, 2));
+        double distance = Math.Sqrt(Math.Pow(transform.position.x - target.position.x, 2) + Math.Pow(transform.position.y - target.position.y, 2));
+		if (distance < distanceToPlay && target.gameObject.GetComponent<Player>().SoundPowerUp)
+            audio.mute = false;
+        timer += Time.deltaTime;
 		//Debug.LogWarning("distancia: " + distance);
 		double beepPitch = 1/(1 + distance);
         // Debug.LogWarning("pitch: " + beepPitch);
@@ -45,7 +49,7 @@ public class SonicBomb : MonoBehaviour {
         if(other.tag == "Player")
         {
             other.gameObject.GetComponent<Player>().LoseFood(playerDamage);
-			// gameObject.SetActive(false);
+			gameObject.SetActive(false);
         }
 	}
 	public void DamageEnemy(int loss)
