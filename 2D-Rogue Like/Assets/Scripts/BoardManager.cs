@@ -97,7 +97,7 @@ public class BoardManager : MonoBehaviour {
                         Instantiate(tileChoice, new Vector3(y, x, 0f), Quaternion.identity);
                         layoutObjects.Add(tileChoice);
                         layoutPositions.Add(new Vector3(y, x, 0f));
-                        Debug.Log("included" + levels.layers[1].data[index]);
+                        // Debug.Log("included" + levels.layers[1].data[index]);
                     }
                 }
             }

@@ -5,7 +5,7 @@ using System;
 
 public class Inventory : MonoBehaviour {
 
-	private const int SLOTS = 7;
+	private const int SLOTS = 4;
 	private List<IInventoryItem> mItems = new List<IInventoryItem> ();
 
 	public event EventHandler<InventoryEventArgs> ItemAdded;
@@ -20,10 +20,10 @@ public class Inventory : MonoBehaviour {
 			// if (collider.enabled)
 			if (true)
 			{
-				Debug.LogWarning(">> adding item - total items before: " + mItems.Count);			
+				Player player = GameObject.Find("Player").GetComponent<Player>();
+				player.ApplyPowerUp(item.Name);
 				collider.enabled = false;
-				mItems.Add(item);
-				Debug.LogWarning(">> total items after: " + mItems.Count);			
+				mItems.Add(item);		
 				item.OnPickup();
 
 				if (ItemAdded != null)
@@ -39,6 +39,8 @@ public class Inventory : MonoBehaviour {
 		foreach (IInventoryItem item in itemsList)
 		{
 			mItems.Add(item);
+			Player player = GameObject.Find("Player").GetComponent<Player>();
+			player.ApplyPowerUp(item.Name);
 			if (ItemAdded != null)
 			{
 				ItemAdded(this, new InventoryEventArgs(item));
@@ -53,8 +55,6 @@ public class Inventory : MonoBehaviour {
 
 	public bool hasItem (string name)
 	{
-		Debug.LogWarning("searching for: " + name);
-		Debug.LogWarning("list items: " + mItems);
 		for (int i = 0; i < mItems.Count; i++)
 			if (mItems[i].Name == name)
 				return true;

@@ -27,6 +27,12 @@ public class Player : MonoBehaviour {
     public GameObject Laser;
     public float laserForce;
 
+    // powerups control
+    public bool StrengthPowerUp = false;
+    public bool VisionPowerUp = false;
+    public bool SpeedPowerUp = false;
+    public bool SoundPowerUp = false;
+
     private bool invencible;
     private Animator animator;
     private int specialItemCounter;
@@ -56,9 +62,9 @@ public class Player : MonoBehaviour {
     {
         GameManager.instance.playerFoodPoints = food;
         GameManager.instance.specialItemCounter = specialItemCounter;
-        Debug.LogWarning("setting gm inventory. b4: " + GameManager.instance.inventoryItems.Count);
+        // Debug.LogWarning("setting gm inventory. b4: " + GameManager.instance.inventoryItems.Count);
         GameManager.instance.inventoryItems = new List<IInventoryItem> (inventory.getMItems());
-        Debug.LogWarning("setting gm inventory. now: " + GameManager.instance.inventoryItems.Count);
+        // Debug.LogWarning("setting gm inventory. now: " + GameManager.instance.inventoryItems.Count);
         // check if player is going back to the previous room
         // if so, we need to decrease the level by 2, since we always increase it
         // by one at the beginning
@@ -99,6 +105,8 @@ public class Player : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        if (SpeedPowerUp && speed == 2)
+            speed = 3;
         if(Input.GetKeyDown("space"))
         {
             animator.SetTrigger("playerRanged");
@@ -170,7 +178,7 @@ public class Player : MonoBehaviour {
         }
          else if (other.tag == "Wall")
         {
-            if (inventory.hasItem("Strength"))
+            if (StrengthPowerUp)
                 other.SendMessage("DamageWall", wallDamage, SendMessageOptions.DontRequireReceiver);
         }
         else if (other.tag == "Enemy")
@@ -188,8 +196,6 @@ public class Player : MonoBehaviour {
         if (item != null)
         {
             inventory.AddItem(item);
-            if (item.Name == "Speed")
-                speed = 3;
         }
         disableMelee();
     }
@@ -210,6 +216,28 @@ public class Player : MonoBehaviour {
             StartCoroutine(setInvencible());
        }
         
+    }
+
+    public void ApplyPowerUp (string power)
+    {   Debug.LogWarning(power);
+        switch(power)
+        {
+            case "Eye":
+                VisionPowerUp = true;
+                break;
+            case "Sound":
+                SoundPowerUp = true;
+                break;
+            case "Speed":
+                SpeedPowerUp = true;
+                break;
+            case "Strength":
+                Debug.LogWarning("settingPowerUp");
+                StrengthPowerUp = true;
+                break;
+            default:
+                break;
+        }	
     }
 
     IEnumerator setInvencible()
