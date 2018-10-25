@@ -36,6 +36,7 @@ public class BoardManager : MonoBehaviour {
 	public GameObject[] enemyTiles;
 	public GameObject[] outerWallsTiles;
     public GameObject[] tilesetTiles;
+    public GameObject[] allPowers;
     public List<GameObject> layoutObjects = new List<GameObject>();
 	public List<Vector3> layoutPositions = new List<Vector3>();
 	private string gameDataFileName = "levels.json";

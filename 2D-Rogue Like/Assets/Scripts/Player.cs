@@ -33,6 +33,11 @@ public class Player : MonoBehaviour {
     public bool SpeedPowerUp = false;
     public bool SoundPowerUp = false;
 
+    public bool HaveStrengthPowerUp = false;
+    public bool HaveVisionPowerUp = false;
+    public bool HaveSpeedPowerUp = false;
+    public bool HaveSoundPowerUp = false;
+
     private bool invencible;
     private Animator animator;
     private int specialItemCounter;
@@ -191,7 +196,21 @@ public class Player : MonoBehaviour {
             specialItemCounterText.text = "x" + specialItemCounter;
             other.gameObject.SetActive(false);
         }
+        else if (other.tag == "Reprinter")
+        {
+            //CRIA o ARRAY DE ALGUMA FORMA AQUI
 
+            /*foreach (IInventoryItem currentItem in items)
+            {
+                if (!inventory.hasItem(currentItem.Name) && specialItemCounter > 0 && HaveVisionPowerUp)
+                {
+                    specialItemCounter--;
+                    inventory.AddItem(currentItem);
+                }
+            }*/
+            
+            
+        }
         IInventoryItem item = other.GetComponent<IInventoryItem> ();
         if (item != null)
         {
@@ -212,9 +231,9 @@ public class Player : MonoBehaviour {
             animator.SetTrigger("playerHit");
             food -= loss;
             foodText.text = "-" + loss + " Food: " + food;
-            bool morreu = inventory.removeLastAdded();
+            /*bool morreu = inventory.removeLastAdded();
             if (morreu)
-                foodText.text = ">>>> morreu <<<<";
+                foodText.text = ">>>> morreu <<<<";*/
             CheckIfGameOver();
             StartCoroutine(setInvencible());
        }
@@ -227,16 +246,20 @@ public class Player : MonoBehaviour {
         {
             case "Eye":
                 VisionPowerUp = true;
+                HaveVisionPowerUp = true;
                 break;
             case "Sound":
                 SoundPowerUp = true;
+                HaveSoundPowerUp = true;
                 break;
             case "Speed":
                 SpeedPowerUp = true;
+                HaveSpeedPowerUp = true;
                 break;
             case "Strength":
                 Debug.LogWarning("settingPowerUp");
                 StrengthPowerUp = true;
+                HaveStrengthPowerUp = true;
                 break;
             default:
                 break;
