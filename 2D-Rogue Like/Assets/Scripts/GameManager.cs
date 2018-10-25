@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour {
     public List<IInventoryItem> inventoryItems = new List<IInventoryItem>();
     public Dictionary<int, string> boardDict = new Dictionary<int, string>();
     public Vector3 playerStartPosition = new Vector3(4, 0, 0f);
+    public HUD hud;
 
     private Text levelText;
     private GameObject levelImage;

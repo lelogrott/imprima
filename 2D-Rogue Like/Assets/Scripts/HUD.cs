@@ -6,6 +6,7 @@ using UnityEngine;
 public class HUD : MonoBehaviour {
 
 	public Inventory Inventory;
+	public MessagePanel messagePanel;
 
 	// Use this for initialization
 	void Start () {
@@ -14,15 +15,11 @@ public class HUD : MonoBehaviour {
 
 	private void InventoryScript_ItemAdded(object sender, InventoryEventArgs e)
 	{
-		// Debug.LogWarning(">> HUD");
 		Transform inventoryPanel = transform.Find("Inventory");
 		foreach (Transform slot in inventoryPanel)
 		{
 			// border... image
 			Image image = slot.GetChild(0).GetChild(0).GetComponent<Image>();
-			// Debug.LogWarning("image >> " + image);
-			// Debug.LogWarning("image enabled >> " + image.enabled);
-			// Debug.LogWarning("item image >> " + e.Item.Image);
 			
 			// we found the empty slot
 			if (!image.enabled)
@@ -30,10 +27,19 @@ public class HUD : MonoBehaviour {
 				image.enabled = true;
 				image.sprite = e.Item.Image;
 
-				// TODO: STORE A REFERENCE TO THE ITEM
 				break;
 			}
 		}
+	}
+
+	public void OpenMessage()
+	{
+		messagePanel.gameObject.SetActive(true);
+	}
+
+	public void HideMessage()
+	{
+		messagePanel.gameObject.SetActive(false);
 	}
 	
 	// Update is called once per frame

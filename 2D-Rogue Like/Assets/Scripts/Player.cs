@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour {
 
@@ -167,6 +169,7 @@ public class Player : MonoBehaviour {
             specialItemCounter++;
             specialItemCounterText.text = "x" + specialItemCounter;
             other.gameObject.SetActive(false);
+            GameManager.instance.hud.OpenMessage();
         }
         else if (other.tag == "Reprinter")
         {
