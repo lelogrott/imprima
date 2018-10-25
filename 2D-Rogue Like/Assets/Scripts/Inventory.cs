@@ -9,6 +9,7 @@ public class Inventory : MonoBehaviour {
 	private List<IInventoryItem> mItems = new List<IInventoryItem> ();
 
 	public event EventHandler<InventoryEventArgs> ItemAdded;
+	public event EventHandler<InventoryEventArgs> ItemRemoved;
 
 	public void AddItem(IInventoryItem item)
 	{
@@ -58,6 +59,18 @@ public class Inventory : MonoBehaviour {
 		for (int i = 0; i < mItems.Count; i++)
 			if (mItems[i].Name == name)
 				return true;
+		return false;
+	}
+
+	public bool removeLastAdded() {
+		int totalItems = mItems.Count;
+		if (totalItems != 0)
+		{
+			int lastItemIndex = mItems.Count - 1;
+			IInventoryItem item = mItems[lastItemIndex];
+			ItemRemoved(this, new InventoryEventArgs(item));
+			return true;
+		}
 		return false;
 	}
 }

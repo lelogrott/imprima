@@ -23,7 +23,6 @@ public class Strength : MonoBehaviour, IInventoryItem {
 
 	public void OnPickup()
 	{
-		Debug.LogWarning(">>Disabling strength");
 		gameObject.SetActive(false);
 	}
 }

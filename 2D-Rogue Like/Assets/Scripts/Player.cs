@@ -212,6 +212,9 @@ public class Player : MonoBehaviour {
             animator.SetTrigger("playerHit");
             food -= loss;
             foodText.text = "-" + loss + " Food: " + food;
+            // bool morreu = inventory.removeLastAdded();
+            // if (morreu)
+            //     foodText.text = ">>>> morreu <<<<";
             CheckIfGameOver();
             StartCoroutine(setInvencible());
        }
