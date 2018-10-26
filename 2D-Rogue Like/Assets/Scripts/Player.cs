@@ -51,10 +51,13 @@ public class Player : MonoBehaviour {
         disableMelee();
         transform.position = GameManager.instance.playerStartPosition;
         specialItemCounterText.text = "x" + specialItemCounter;
+        HUD hud = GameObject.Find("Canvas").GetComponent<HUD>();
+        //GameObject instance = Instantiate(toInstantiate, new Vector3(y, x, 0f), Quaternion.identity) as GameObject;
+        //hud.OpenMessage(0);
         //Debug.Log(GameManager.instance.playerStartPosition);
     }
 
-    private void OnDisable()
+        private void OnDisable()
     {
         GameManager.instance.specialItemCounter = specialItemCounter;
         GameManager.instance.inventoryItems = new List<IInventoryItem> (inventory.getMItems());
@@ -113,7 +116,13 @@ public class Player : MonoBehaviour {
             animator.SetTrigger("playerChop");
             meleeAttack();
         }
-	}
+
+        if(Input.anyKeyDown && GameManager.instance.hud) 
+        {
+            GameManager.instance.hud.HideMessage();
+        }
+
+    }
 
     private void fireLaser()
     {
@@ -172,7 +181,17 @@ public class Player : MonoBehaviour {
         }
         else if (other.tag == "WarningMessage")
         {
-            GameManager.instance.hud.OpenMessage(GameManager.instance.getLevel());
+            Debug.Log(GameManager.instance.getLevel());
+            if (GameManager.instance.getLevel() == 2)
+            {
+                GameManager.instance.hud.OpenMessage(1);
+            }
+
+            if (GameManager.instance.getLevel() == 4)
+            {
+                GameManager.instance.hud.OpenMessage(2);
+            }
+
         }
         else if (other.tag == "Reprinter")
         {
@@ -193,7 +212,15 @@ public class Player : MonoBehaviour {
         disableMelee();
     }
 
-    private void Restart()
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.tag == "WarningMessage")
+        {
+            GameManager.instance.hud.HideMessage();
+        }
+    }
+
+        private void Restart()
     {
         SceneManager.LoadScene(0);
     }

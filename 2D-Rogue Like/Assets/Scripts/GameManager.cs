@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public bool playersTurn = true;
     public List<IInventoryItem> inventoryItems = new List<IInventoryItem>();
     public Dictionary<int, string> boardDict = new Dictionary<int, string>();
-    public Vector3 playerStartPosition = new Vector3(4, 0, 0f);
+    public Vector3 playerStartPosition = new Vector3(7, 0, 0f);
     public HUD hud;
 
     private Text levelText;
@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour {
 
         DontDestroyOnLoad(gameObject);
         boardScript = GetComponent<BoardManager>();
-        // InitGame();
+        HUD hud = GameObject.Find("Canvas").GetComponent<HUD>();
     }
 
 
