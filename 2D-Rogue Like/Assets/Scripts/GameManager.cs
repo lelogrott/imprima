@@ -77,6 +77,13 @@ public class GameManager : MonoBehaviour {
         levelText.text = "Você morreu!";
         levelImage.SetActive(true);
         enabled = false;
+        StartCoroutine(returnToMainMenu());
+    }
+
+    IEnumerator returnToMainMenu()
+    { 
+        yield return new WaitForSeconds(1.5f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 	
 	// Update is called once per frame

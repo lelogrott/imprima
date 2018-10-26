@@ -18,11 +18,6 @@ public class Player : MonoBehaviour {
     public Text specialItemCounterText;
     public AudioClip moveSound1;
     public AudioClip moveSound2;
-    public AudioClip eatSound1;
-    public AudioClip eatSound2;
-    public AudioClip drinkSound1;
-    public AudioClip drinkSound2;
-    public AudioClip gameOverSound;
     public GameObject Laser;
     public float laserForce;
 
@@ -39,7 +34,7 @@ public class Player : MonoBehaviour {
     private Rigidbody2D rb2d;
     private Transform rangedSource;
     private bool stillAlive = true;
-    private bool printing = false;
+    private bool printing = false; 
 
     void Start () {
         rb2d = GetComponent<Rigidbody2D> ();
@@ -176,6 +171,10 @@ public class Player : MonoBehaviour {
         {
             GameManager.instance.hud.OpenMessage(GameManager.instance.getLevel());
         }
+        else if (other.tag == "Computer")
+        {
+            GameManager.instance.hud.OpenMessage(GameManager.instance.getLevel());
+        }
         else if (other.tag == "Reprinter")
         {
             List<IInventoryItem> brokenItems = inventory.getBrokenItems();
@@ -284,8 +283,6 @@ public class Player : MonoBehaviour {
 
     private void GameOver()
     {
-        SoundManager.instance.PlaySingle(gameOverSound);
-        SoundManager.instance.musicSource.Stop();
         GameManager.instance.GameOver();       
     }
 }
