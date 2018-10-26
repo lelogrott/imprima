@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour {
     public List<IInventoryItem> inventoryItems = new List<IInventoryItem>();
     public Dictionary<int, string> boardDict = new Dictionary<int, string>();
     public Vector3 playerStartPosition = new Vector3(7, 0, 0f);
-    public HUD hud;
+    public MessagePanel hud;
 
     private Text levelText;
     private GameObject levelImage;
@@ -33,9 +33,13 @@ public class GameManager : MonoBehaviour {
 
         DontDestroyOnLoad(gameObject);
         boardScript = GetComponent<BoardManager>();
-        HUD hud = GameObject.Find("Canvas").GetComponent<HUD>();
+        hud = GetComponent<MessagePanel>();
     }
 
+    public void OpenMessage(int index)
+    {
+        hud.OpenMessage(index);
+    }
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {

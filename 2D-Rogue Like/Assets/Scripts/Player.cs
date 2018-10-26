@@ -47,10 +47,6 @@ public class Player : MonoBehaviour {
         disableMelee();
         transform.position = GameManager.instance.playerStartPosition;
         specialItemCounterText.text = "x" + specialItemCounter;
-        HUD hud = GameObject.Find("Canvas").GetComponent<HUD>();
-        //GameObject instance = Instantiate(toInstantiate, new Vector3(y, x, 0f), Quaternion.identity) as GameObject;
-        //hud.OpenMessage(0);
-        //Debug.Log(GameManager.instance.playerStartPosition);
     }
 
         private void OnDisable()
@@ -181,7 +177,8 @@ public class Player : MonoBehaviour {
             Debug.Log(GameManager.instance.getLevel());
             if (GameManager.instance.getLevel() == 2)
             {
-                GameManager.instance.hud.OpenMessage(1);
+                Debug.LogWarning(GameManager.instance.hud);
+                GameManager.instance.OpenMessage(1);
             }
 
             if (GameManager.instance.getLevel() == 4)
@@ -192,7 +189,7 @@ public class Player : MonoBehaviour {
         }
         else if (other.tag == "Computer")
         {
-            GameManager.instance.hud.OpenMessage(GameManager.instance.getLevel());
+            GameManager.instance.OpenMessage(GameManager.instance.getLevel());
         }
         else if (other.tag == "Reprinter")
         {
