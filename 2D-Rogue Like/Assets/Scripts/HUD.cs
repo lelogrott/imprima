@@ -8,8 +8,13 @@ public class HUD : MonoBehaviour {
 	public Inventory Inventory;
 	public MessagePanel messagePanel;
 
+	private List<string> messages = new List<string>();
+	private List<string> titles = new List<string>();
+
 	// Use this for initialization
 	void Start () {
+		titles.Add("IMPRIMA");
+		messages.Add("<b>Missão</b>\n> Encontre e colete projetos privados de próteses aprimoradas da PROTEBRAS.\n> Suba ao 10º andar para acessar a antena e distribuir os projetos na internet.\n<b>Controles</b>\n> Movimento: UP, DOWN, LEFT, RIGHT ou W, A, S, D\n> Tiro Laser: ESPAÇO (mira com cursor)\n> Golpe Físico: Movimento + Q");
 		Inventory.ItemAdded += InventoryScript_ItemAdded;
 	}
 
@@ -32,8 +37,10 @@ public class HUD : MonoBehaviour {
 		}
 	}
 
-	public void OpenMessage()
+	public void OpenMessage(int messageIndex)
 	{
+		messagePanel.Title.text = titles[0];
+		messagePanel.Content.text = messages[0];
 		messagePanel.gameObject.SetActive(true);
 	}
 

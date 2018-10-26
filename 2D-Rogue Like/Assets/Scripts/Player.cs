@@ -169,7 +169,10 @@ public class Player : MonoBehaviour {
             specialItemCounter++;
             specialItemCounterText.text = "x" + specialItemCounter;
             other.gameObject.SetActive(false);
-            GameManager.instance.hud.OpenMessage();
+        }
+        else if (other.tag == "WarningMessage")
+        {
+            GameManager.instance.hud.OpenMessage(GameManager.instance.getLevel());
         }
         else if (other.tag == "Reprinter")
         {
