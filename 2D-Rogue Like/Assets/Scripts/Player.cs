@@ -39,6 +39,7 @@ public class Player : MonoBehaviour {
     private Rigidbody2D rb2d;
     private Transform rangedSource;
     private bool stillAlive = true;
+    private bool printing = false;
 
     void Start () {
         rb2d = GetComponent<Rigidbody2D> ();
@@ -99,6 +100,7 @@ public class Player : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        if (printing) return;
         if (SpeedPowerUp && speed == 2)
             speed = 3;
         else if (!SpeedPowerUp && speed == 3)
@@ -179,6 +181,7 @@ public class Player : MonoBehaviour {
             List<IInventoryItem> brokenItems = inventory.getBrokenItems();
             if (brokenItems.Count > 0 && specialItemCounter > 0)
             {
+                StartCoroutine(startPrintAnimation());
                 int randomIndex = Random.Range (0, brokenItems.Count);
                 inventory.AddItem(brokenItems[randomIndex]);
                 specialItemCounter--;
@@ -267,6 +270,16 @@ public class Player : MonoBehaviour {
         this.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 1f);
         yield return new WaitForSeconds(0.2f);
         invencible = false;
+    }
+
+    IEnumerator startPrintAnimation()
+    {
+        printing = true;
+        speed = 0;
+        animator.SetTrigger("playerPrint");
+        yield return new WaitForSeconds(1);
+        printing = false;
+        speed = 2;
     }
 
     private void GameOver()

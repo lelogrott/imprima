@@ -39,8 +39,9 @@ public class HUD : MonoBehaviour {
 
 	public void OpenMessage(int messageIndex)
 	{
-		messagePanel.Title.text = titles[0];
-		messagePanel.Content.text = messages[0];
+		int levelOffset = 2;
+		messagePanel.Title.text = titles[messageIndex - levelOffset];
+		messagePanel.Content.text = messages[messageIndex - levelOffset];
 		messagePanel.gameObject.SetActive(true);
 	}
 
