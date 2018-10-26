@@ -23,8 +23,8 @@ public class MessagePanel : MonoBehaviour {
     // }
 
     void Start () {
-		Title = GameObject.Find("Canvas").transform.FindChild("MessagePanel").transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI> ();
-		Content = GameObject.Find("Canvas").transform.FindChild("MessagePanel").transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI> ();
+		Title = GameObject.Find("Canvas").transform.Find("MessagePanel").transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI> ();
+		Content = GameObject.Find("Canvas").transform.Find("MessagePanel").transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI> ();
         //titles.Add("IMPRIMA");
         //messages.Add("<b>Missão</b>\n> Encontre e colete projetos privados de próteses aprimoradas da PROTEBRAS.\n> Suba ao 10º andar para acessar a antena e distribuir os projetos na internet.\n<b>Controles</b>\n> Movimento: UP, DOWN, LEFT, RIGHT ou W, A, S, D\n> Tiro Laser: ESPAÇO (mira com cursor)\n> Golpe Físico: Movimento + Q");
 
@@ -74,12 +74,12 @@ public class MessagePanel : MonoBehaviour {
         Title.text = titles[messageIndex - levelOffset];
         Content.text = messages[messageIndex - levelOffset];
 		Debug.LogWarning("dentro do mp>>" + this);
-		GameObject.Find("Canvas").transform.FindChild("MessagePanel").gameObject.GetComponent<CanvasGroup>().alpha = 1;
+		GameObject.Find("Canvas").transform.Find("MessagePanel").gameObject.GetComponent<CanvasGroup>().alpha = 1;
     }
 
     public void HideMessage()
 	{
-		GameObject.Find("Canvas").transform.FindChild("MessagePanel").gameObject.GetComponent<CanvasGroup>().alpha = 0;
+		GameObject.Find("Canvas").transform.Find("MessagePanel").gameObject.GetComponent<CanvasGroup>().alpha = 0;
 	}
 
 }

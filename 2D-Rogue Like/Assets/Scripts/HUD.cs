@@ -11,7 +11,7 @@ public class HUD : MonoBehaviour {
 
 	void Awake ()
 	{
-		DontDestroyOnLoad(GameObject.Find("Canvas").transform.FindChild("MessagePanel"));
+		//DontDestroyOnLoad(GameObject.Find("Canvas").transform.Find("MessagePanel"));
 	}
     void Start () {
         Inventory.ItemAdded += InventoryScript_ItemAdded;

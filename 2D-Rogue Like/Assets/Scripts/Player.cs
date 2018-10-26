@@ -27,6 +27,7 @@ public class Player : MonoBehaviour {
     public bool SpeedPowerUp = false;
     public bool SoundPowerUp = false;
 
+    private bool finishGame = false;
     private bool invencible;
     private Animator animator;
     private int specialItemCounter;
@@ -113,8 +114,18 @@ public class Player : MonoBehaviour {
         if(Input.anyKeyDown && GameManager.instance.hud) 
         {
             GameManager.instance.HideMessage();
+            if (finishGame)
+            {
+                StartCoroutine(quitGame());
+            }
         }
 
+    }
+
+    IEnumerator quitGame()
+    {
+        yield return new WaitForSeconds(3f);
+        Application.Quit();
     }
 
     private void fireLaser()
@@ -174,22 +185,49 @@ public class Player : MonoBehaviour {
         }
         else if (other.tag == "WarningMessage")
         {
-            Debug.Log(GameManager.instance.getLevel());
-            if (GameManager.instance.getLevel() == 2)
+            int level = GameManager.instance.getLevel() - 1;
+            if (level == 1)
             {
-                Debug.LogWarning(GameManager.instance.hud);
                 GameManager.instance.OpenMessage(1);
             }
-
-            if (GameManager.instance.getLevel() == 4)
+            else if (level == 3)
             {
-                GameManager.instance.OpenMessage(2);
+                GameManager.instance.OpenMessage(6);
+            }
+            else if (level == 6)
+            {
+                GameManager.instance.OpenMessage(8);
+            }
+            else if (level == 7)
+            {
+                GameManager.instance.OpenMessage(7);
             }
 
         }
         else if (other.tag == "Computer")
         {
-            GameManager.instance.OpenMessage(GameManager.instance.getLevel());
+            finishGame = true;
+            GameManager.instance.OpenMessage(9);
+        }
+        else if (other.tag == "SoundPower")
+        {
+            GameManager.instance.OpenMessage(4);
+        }
+        else if (other.tag == "VisionPower")
+        {
+            GameManager.instance.OpenMessage(3);
+        }
+        else if (other.tag == "StrengthPower")
+        {
+            GameManager.instance.OpenMessage(5);
+        }
+        else if (other.tag == "RunPower")
+        {
+            GameManager.instance.OpenMessage(2);
+        }
+        else if (other.tag == "Carrot")
+        {
+            GameManager.instance.OpenMessage(10);
         }
         else if (other.tag == "Reprinter")
         {
@@ -213,14 +251,15 @@ public class Player : MonoBehaviour {
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == "WarningMessage")
+        if (other.tag == "WarningMessage" || other.tag == "VisionPower" || other.tag == "StrengthPower" || other.tag == "RunPower" || other.tag == "SoundPower")
         {
             GameManager.instance.HideMessage();
         }
     }
 
-        private void Restart()
+    private void Restart()
     {
+        GameManager.instance.wasGameOver = false;
         SceneManager.LoadScene(0);
     }
 

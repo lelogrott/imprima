@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
     public Dictionary<int, string> boardDict = new Dictionary<int, string>();
     public Vector3 playerStartPosition = new Vector3(7, 0, 0f);
     public MessagePanel hud;
+    public bool wasGameOver = false;
 
     private Text levelText;
     private GameObject levelImage;
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour {
     private int maxLevel = 10;
     private bool enemiesMoving;
     private bool doingSetup;
+    
     private List<string> messages = new List<string>();
 	private List<string> titles = new List<string>();
     
@@ -49,7 +51,8 @@ public class GameManager : MonoBehaviour {
             "CUIDADO!", //Aviso level 3
             "CUIDADO!", //Aviso level 7
             "CUIDADO!", //Aviso level 6
-            "MISSÂO CUMPRIDA" //Computador na antena
+            "MISSÂO CUMPRIDA", //Computador na antena
+            "???" 
             );
         AddMessagesToList(
             "<b> Missão </b>\n > Encontre e colete projetos privados de próteses aprimoradas da PROTEBRAS.\n > Suba ao 10º andar para acessar a antena e distribuir os projetos na internet.\n <b> Controles </b>\n > Movimento: UP, DOWN, LEFT, RIGHT ou W, A, S, D\n > Tiro Laser: ESPAÇO(mira com cursor)\n > Golpe Físico: Movimento + Q",
@@ -60,29 +63,40 @@ public class GameManager : MonoBehaviour {
             "Campo de testes de laser, precisa ser desumanamente rápido.", //Aviso level 3
             "Pisos com minas terrestres ultrasônicas, emitem uma frequência de som abaixo da detecção humana.", //Aviso level 7            );
             "Pisos com laser infra vermelho (invisível ao olho nú)", //Aviso level 6
-            "<b> A PROTEBRAS FOI HACKEADA </b>\n > Parabéns! \n Você conseguiu vazar todos os projetos das próteses para a população!" //Computador na antena
+            "<b> A PROTEBRAS FOI HACKEADA </b>\n > Parabéns! \n Você conseguiu vazar todos os projetos das próteses para a população!", //Computador na antena
+            "Its Just Carrot juice"
             );
     }
 
     public void OpenMessage(int messageIndex)
     {
-        TextMeshProUGUI Title = GameObject.Find("Canvas").transform.FindChild("MessagePanel").transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI> ();
-		TextMeshProUGUI Content = GameObject.Find("Canvas").transform.FindChild("MessagePanel").transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI> ();
+        TextMeshProUGUI Title = GameObject.Find("Canvas").transform.Find("MessagePanel").transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI> ();
+		TextMeshProUGUI Content = GameObject.Find("Canvas").transform.Find("MessagePanel").transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI> ();
         int levelOffset = 1;
         Debug.Log(messages.Count);
         Title.text = titles[messageIndex - levelOffset];
         Content.text = messages[messageIndex - levelOffset];
-		GameObject.Find("Canvas").transform.FindChild("MessagePanel").gameObject.GetComponent<CanvasGroup>().alpha = 1;
+		GameObject.Find("Canvas").transform.Find("MessagePanel").gameObject.GetComponent<CanvasGroup>().alpha = 1;
     }
 
     public void HideMessage()
 	{
-		GameObject.Find("Canvas").transform.FindChild("MessagePanel").gameObject.GetComponent<CanvasGroup>().alpha = 0;
+		GameObject.Find("Canvas").transform.Find("MessagePanel").gameObject.GetComponent<CanvasGroup>().alpha = 0;
 	}
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
         instance.InitGame();
+        //if (!wasGameOver)
+        //{
+            instance.level++;
+            //StartCoroutine(addLevel());
+        //}
+    }
+
+    IEnumerator addLevel()
+    {
+        yield return new WaitForSeconds(2f);
         instance.level++;
     }
 
@@ -101,8 +115,18 @@ public class GameManager : MonoBehaviour {
         doingSetup = true;
 
         levelImage = GameObject.Find("LevelImage");
+        
         levelText = GameObject.Find("LevelText").GetComponent<Text>();
-        levelText.text = level + "° andar";
+        if (!wasGameOver)
+        {
+            
+            levelText.text = level + "° andar";
+        }
+        else
+        {
+            levelText.text = "1° andar";
+        }
+        
         levelImage.SetActive(true);
         Invoke("HideLevelImage", levelStartDelay);
 
@@ -119,14 +143,27 @@ public class GameManager : MonoBehaviour {
     {
         levelText.text = "Você morreu!";
         levelImage.SetActive(true);
-        enabled = false;
-        StartCoroutine(returnToMainMenu());
+        //enabled = false;
+        wasGameOver = true;
+        StartCoroutine(returnToLevelOne());
+    }
+
+    IEnumerator returnToLevelOne()
+    {
+        yield return new WaitForSeconds(1.5f);
+        specialItemCounter = 0;
+        inventoryItems = new List<IInventoryItem>();
+        playerStartPosition = new Vector3(7, 0, 0f);
+        level = 1;
+        SceneManager.LoadScene(0);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     IEnumerator returnToMainMenu()
     { 
         yield return new WaitForSeconds(1.5f);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        Application.LoadLevel(1);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 	
 	// Update is called once per frame

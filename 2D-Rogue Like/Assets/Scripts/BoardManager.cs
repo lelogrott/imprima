@@ -64,7 +64,6 @@ public class BoardManager : MonoBehaviour {
 
 	void BoardSetup()
 	{
-        //Debug.Log(levels.layers);
 		boardHolder = new GameObject ("Board").transform;
         int loop = 0;
         for (int x = -1; x < 9; x++) 
