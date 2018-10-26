@@ -8,6 +8,11 @@ public class HUD : MonoBehaviour {
 	public Inventory Inventory;
 
     // Use this for initialization
+
+	void Awake ()
+	{
+		DontDestroyOnLoad(GameObject.Find("Canvas").transform.FindChild("MessagePanel"));
+	}
     void Start () {
         Inventory.ItemAdded += InventoryScript_ItemAdded;
 	}

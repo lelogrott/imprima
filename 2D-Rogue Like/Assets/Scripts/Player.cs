@@ -112,7 +112,7 @@ public class Player : MonoBehaviour {
 
         if(Input.anyKeyDown && GameManager.instance.hud) 
         {
-            GameManager.instance.hud.HideMessage();
+            GameManager.instance.HideMessage();
         }
 
     }
@@ -183,7 +183,7 @@ public class Player : MonoBehaviour {
 
             if (GameManager.instance.getLevel() == 4)
             {
-                GameManager.instance.hud.OpenMessage(2);
+                GameManager.instance.OpenMessage(2);
             }
 
         }
@@ -215,7 +215,7 @@ public class Player : MonoBehaviour {
     {
         if (other.tag == "WarningMessage")
         {
-            GameManager.instance.hud.HideMessage();
+            GameManager.instance.HideMessage();
         }
     }
 
