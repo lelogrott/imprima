@@ -165,9 +165,10 @@ public class BoardManager : MonoBehaviour {
     {
         // Path.Combine combines strings into a file path
         // Application.StreamingAssets points to Assets/StreamingAssets in the Editor, and the StreamingAssets folder in a build
-        string filePath = Path.Combine("Assets/Maps/", gameDataFileName);
+        string filePath = Path.Combine(Application.streamingAssetsPath, gameDataFileName);
 
-        if(File.Exists(filePath))
+
+        if (File.Exists(filePath))
         {
             // Read the json from the file into a string
             string dataAsJson = File.ReadAllText(filePath); 

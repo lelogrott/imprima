@@ -155,7 +155,7 @@ public class GameManager : MonoBehaviour {
         inventoryItems = new List<IInventoryItem>();
         playerStartPosition = new Vector3(7, 0, 0f);
         level = 1;
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 

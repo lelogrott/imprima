@@ -10,11 +10,11 @@ public class MainMenu : MonoBehaviour {
         int sc = SceneManager.GetActiveScene().buildIndex;
         if (sc == 0)
         {
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(1);
         }
         else
         {
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(1);
         }
         
 	}

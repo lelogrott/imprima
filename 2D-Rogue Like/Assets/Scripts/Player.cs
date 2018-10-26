@@ -260,7 +260,7 @@ public class Player : MonoBehaviour {
     private void Restart()
     {
         GameManager.instance.wasGameOver = false;
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 
     public void GetDamage()

@@ -1,9 +1,9 @@
 WindowsStandalone
 PlayerPath?
-C:/Users/vvilk/IMPRIMA/2D-Rogue Like.exe
+C:/Users/vvilk/Documents/imprima/2D-Rogue Like.exe
 SceneListBegin?
-Assets/Scenes/Main.unity
 Assets/Scenes/Menu.unity
+Assets/Scenes/Main.unity
 SceneListEnd?
 c422dd62785a6d0afa870fbd111886ce Unity.TextMeshPro.dll:TMPro.TMP_SelectionCaret
 7b803eb2910e9b4cd5e521ae07b9f7d6 Unity.TextMeshPro.dll:TMPro.TMP_Dropdown
