@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour {
             "???" 
             );
         AddMessagesToList(
-            "<b> Missão </b>\n > Encontre e colete projetos privados de próteses aprimoradas da PROTEBRAS.\n > Suba ao 10º andar para acessar a antena e distribuir os projetos na internet.\n <b> Controles </b>\n > Movimento: UP, DOWN, LEFT, RIGHT ou W, A, S, D\n > Tiro Laser: ESPAÇO(mira com cursor)\n > Golpe Físico: Movimento + Q",
+            "<b> Missão </b>\n > Encontre e colete projetos privados de próteses aprimoradas da PROTEBRAS.\n > Suba ao 10º andar para acessar a antena e distribuir os projetos na internet.\n <b> Controles </b>\n > (M)Movimento: UP, DOWN, LEFT, RIGHT ou W, A, S, D\n > Tiro: ESPAÇO/LCLICK(mira com cursor)\n > Golpe Físico: (M) + Q/RCLICK",
             "Permitem uma mobilidade extremamente rápida.", //Poder localizado no 2 andar
             "Permite enxergar uma maior gama de cores.", //Poder localizado na sala secreta 2 andar
             "Permite ouvir frequências ultrasônicas.", //Poder localizado no 7 andar

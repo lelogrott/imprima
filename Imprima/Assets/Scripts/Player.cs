@@ -114,12 +114,12 @@ public class Player : MonoBehaviour {
             speed = 3;
         else if (!SpeedPowerUp && speed == 3)
             speed = 2;
-        if(Input.GetKeyDown("space"))
+        if(Input.GetKeyDown("space") || Input.GetMouseButtonDown(0))
         {
             animator.SetTrigger("playerRanged");
             fireLaser();
         }
-        if(Input.GetKeyDown("q"))
+        if(Input.GetKeyDown("q") || Input.GetMouseButtonDown(1))
         {
             animator.SetTrigger("playerChop");
             meleeAttack();

@@ -1,6 +1,6 @@
 WindowsStandalone
 PlayerPath?
-C:/Users/vvilk/Documents/imprima/2D-Rogue Like.exe
+C:/Users/vvilk/Documents/imprima/Imprima.exe
 SceneListBegin?
 Assets/Scenes/Menu.unity
 Assets/Scenes/Main.unity
@@ -180,7 +180,7 @@ e04611b8715e6833d2bd7010fc6be10b Unity.TextMeshPro.dll:TMPro.TMP_StyleSheet
 94ab197730d1fda35b55a0c10f71d0cf Assembly-CSharp.dll:.Sound
 2f9af06a78208a67db480e9bfed4a076 Unity.TextMeshPro.dll:TMPro.TextMeshPro
 9318334b30e9f195f573b2ce00154b95 Unity.TextMeshPro.dll:TMPro.TMP_ColorGradient
-dadae75454857b925221745a857e4c0b Assembly-CSharp.dll:.GameManager
+e074311fd3e6c0ee9c4d518150abbe25 Assembly-CSharp.dll:.GameManager
 44df2a010874f95852ad6624f9727557 Assembly-CSharp.dll:.Laser
 93307bd34e39d73fd24e00ec39c25a91 Unity.TextMeshPro.dll:TMPro.TMP_SubMesh
 734e1a82bf5d57afc5aa99dbe23ed939 Assembly-CSharp.dll:.MessagePanel
