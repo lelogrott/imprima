@@ -128,6 +128,7 @@ public class Player : MonoBehaviour {
         if(Input.anyKeyDown && GameManager.instance.hud) 
         {
             GameManager.instance.HideMessage();
+            
             if (finishGame)
             {
                 StartCoroutine(quitGame());
@@ -267,7 +268,7 @@ public class Player : MonoBehaviour {
     {
         if (other.tag == "WarningMessage" || other.tag == "VisionPower" || other.tag == "StrengthPower" || other.tag == "RunPower" || other.tag == "SoundPower")
         {
-            GameManager.instance.HideMessage();
+            //GameManager.instance.HideMessage();
         }
     }
 

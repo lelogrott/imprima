@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour {
 
     public float levelStartDelay = 2f;
     public float turnDelay = 0.0f;
+    public bool messageInView = false;
     public static GameManager instance = null;
     public BoardManager boardScript;
     public int specialItemCounter = 0;
@@ -72,19 +73,41 @@ public class GameManager : MonoBehaviour {
 
     public void OpenMessage(int messageIndex)
     {
-        TextMeshProUGUI Title = GameObject.Find("Canvas").transform.Find("MessagePanel").transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI> ();
-		TextMeshProUGUI Content = GameObject.Find("Canvas").transform.Find("MessagePanel").transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI> ();
-        int levelOffset = 1;
-        Debug.Log(messages.Count);
-        Title.text = titles[messageIndex - levelOffset];
-        Content.text = messages[messageIndex - levelOffset];
-		GameObject.Find("Canvas").transform.Find("MessagePanel").gameObject.GetComponent<CanvasGroup>().alpha = 1;
+        if (!messageInView)
+        {
+            Debug.Log("open message");
+            TextMeshProUGUI Title = GameObject.Find("Canvas").transform.Find("MessagePanel").transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI Content = GameObject.Find("Canvas").transform.Find("MessagePanel").transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
+            int levelOffset = 1;
+            messageInView = true;
+            Debug.Log(messages.Count);
+            Title.text = titles[messageIndex - levelOffset];
+            Content.text = messages[messageIndex - levelOffset];
+            GameObject.Find("Canvas").transform.Find("MessagePanel").gameObject.GetComponent<CanvasGroup>().alpha = 1;
+        }
+        
     }
 
     public void HideMessage()
 	{
-		GameObject.Find("Canvas").transform.Find("MessagePanel").gameObject.GetComponent<CanvasGroup>().alpha = 0;
-	}
+        if (messageInView)
+        {
+            StartCoroutine(delayHideMessage());
+        }
+        else
+        {
+            GameObject.Find("Canvas").transform.Find("MessagePanel").gameObject.GetComponent<CanvasGroup>().alpha = 0;
+        }
+        
+    }
+
+    IEnumerator delayHideMessage()
+    {
+        
+        yield return new WaitForSeconds(1f);
+        messageInView = false;
+        Debug.Log("close message");
+    }
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
