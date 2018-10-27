@@ -51,15 +51,27 @@ public class Player : MonoBehaviour {
         specialItemCounterText.text = "x" + specialItemCounter;
     }
 
-        private void OnDisable()
+    private void OnDisable()
     {
-        GameManager.instance.specialItemCounter = specialItemCounter;
+        Debug.Log("last counter " + specialItemCounter);
+        
         GameManager.instance.inventoryItems = new List<IInventoryItem> (inventory.getMItems());
         GameManager.instance.brokenInventoryItems = new List<IInventoryItem> (inventory.getBrokenItems());
 
         // check if player is going back to the previous room
         // if so, we need to decrease the level by 2, since we always increase it
         // by one at the beginning
+
+        if (GameManager.instance.startGameOver)
+        {
+            GameManager.instance.specialItemCounter = 0;
+        } else
+        {
+            GameManager.instance.specialItemCounter = specialItemCounter;
+        }
+
+        GameManager.instance.startGameOver = false;
+
         if (goingBack) 
             GameManager.instance.setLevel(GameManager.instance.getLevel() - 2);
         goingBack = false;

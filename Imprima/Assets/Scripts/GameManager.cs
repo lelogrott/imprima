@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour {
     public Vector3 playerStartPosition = new Vector3(7, 0, 0f);
     public MessagePanel hud;
     public bool wasGameOver = false;
-
+    public bool startGameOver = false;
+    
     private Text levelText;
     private GameObject levelImage;
     private int level = 1;
@@ -142,21 +143,27 @@ public class GameManager : MonoBehaviour {
 
     public void GameOver()
     {
-        levelText.text = "Você morreu!";
-        levelImage.SetActive(true);
-        //enabled = false;
-        wasGameOver = true;
-        StartCoroutine(returnToLevelOne());
+        if (!startGameOver)
+        {
+            startGameOver = true;
+            wasGameOver = true;
+            StartCoroutine(returnToLevelOne());
+        }
+        
     }
 
     IEnumerator returnToLevelOne()
     {
+        yield return new WaitForSeconds(0.5f);
+        levelText.text = "Você morreu!";
+        levelImage.SetActive(true);
         yield return new WaitForSeconds(1.5f);
         specialItemCounter = 0;
         inventoryItems = new List<IInventoryItem>();
         brokenInventoryItems = new List<IInventoryItem>();
         playerStartPosition = new Vector3(7, 0, 0f);
         level = 1;
+        
         SceneManager.LoadScene(1);
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
