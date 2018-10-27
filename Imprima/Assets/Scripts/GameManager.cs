@@ -47,9 +47,9 @@ public class GameManager : MonoBehaviour {
     void Start() {
         AddTitlesToList(
             "IMPRIMA", //Aviso level 1
-            "NOVA PROTESE: JOELHOS ELÁSTICOS", //Poder localizado no 2 andar
-            "NOVA PROTESE: VISÂO AGUÇADA", //Poder localizado na sala secreta 2 andar
-            "NOVA PROTESE: TÍMPANO ULTRASÔNICO", //Poder localizado no 7 andar
+            "NOVA PROTESE:", //Poder localizado no 2 andar
+            "NOVA PROTESE:", //Poder localizado na sala secreta 2 andar
+            "NOVA PROTESE:", //Poder localizado no 7 andar
             "NOVA PROTESE: JUNTAS DE BRAÇO REFORÇADOS", //Poder localizado no 5 andar
             "CUIDADO!", //Aviso level 3
             "CUIDADO!", //Aviso level 7
@@ -59,10 +59,10 @@ public class GameManager : MonoBehaviour {
             );
         AddMessagesToList(
             "<b> Missão </b>\n > Encontre e colete projetos privados de próteses aprimoradas da PROTEBRAS.\n > Suba ao 10º andar para acessar a antena e distribuir os projetos na internet.\n <b> Controles </b>\n > (M)Movimento: UP, DOWN, LEFT, RIGHT ou W, A, S, D\n > Tiro: ESPAÇO/LCLICK(mira com cursor)\n > Golpe Físico: (M) + Q/RCLICK",
-            "Permitem uma mobilidade extremamente rápida.", //Poder localizado no 2 andar
-            "Permite enxergar uma maior gama de cores.", //Poder localizado na sala secreta 2 andar
-            "Permite ouvir frequências ultrasônicas.", //Poder localizado no 7 andar
-            "Proporciona a força de 10 homens, podendo até mesmo quebrar algumas paredes.", //Poder localizado no 5 andar
+            "<b>JOELHOS ELÁSTICOS </b>\n > Permitem uma mobilidade extremamente rápida.", //Poder localizado no 2 andar
+            "<b>VISÂO AGUÇADA</b> \n Permite enxergar uma maior gama de cores.", //Poder localizado na sala secreta 2 andar
+            "<b>TÍMPANO ULTRASÔNICO</b>\n Permite ouvir frequências ultrasônicas.", //Poder localizado no 7 andar
+            "<b> TÍMPANO ULTRASÔNICO</b>\n Proporciona a força de 10 homens, podendo até mesmo quebrar algumas paredes.", //Poder localizado no 5 andar
             "Campo de testes de laser, precisa ser desumanamente rápido.", //Aviso level 3
             "Pisos com minas terrestres ultrasônicas, emitem uma frequência de som abaixo da detecção humana.", //Aviso level 7            );
             "Pisos com laser infra vermelho (invisível ao olho nú)", //Aviso level 6
