@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour {
             "NOVA PROTESE:", //Poder localizado no 2 andar
             "NOVA PROTESE:", //Poder localizado na sala secreta 2 andar
             "NOVA PROTESE:", //Poder localizado no 7 andar
-            "NOVA PROTESE: JUNTAS DE BRAÇO REFORÇADOS", //Poder localizado no 5 andar
+            "NOVA PROTESE:", //Poder localizado no 5 andar
             "CUIDADO!", //Aviso level 3
             "CUIDADO!", //Aviso level 7
             "CUIDADO!", //Aviso level 6
@@ -58,11 +58,11 @@ public class GameManager : MonoBehaviour {
             "???" 
             );
         AddMessagesToList(
-            "<b> Missão </b>\n > Encontre e colete projetos privados de próteses aprimoradas da PROTEBRAS.\n > Suba ao 10º andar para acessar a antena e distribuir os projetos na internet.\n <b> Controles </b>\n > (M)Movimento: UP, DOWN, LEFT, RIGHT ou W, A, S, D\n > Tiro: ESPAÇO/LCLICK(mira com cursor)\n > Golpe Físico: (M) + Q/RCLICK",
+            "<b> Missão </b>\n > Encontre e colete projetos privados de próteses aprimoradas da PROTEBRAS.\n > Suba ao 10º andar para acessar a antena e distribuir os projetos na internet.\n <b> Controles </b>\n > Movimento: UP, DOWN, LEFT, RIGHT ou W, A, S, D\n > Tiro: ESPAÇO/LCLICK(mira com cursor)\n > Golpe Físico: Movimento + Q/RCLICK",
             "<b>JOELHOS ELÁSTICOS </b>\n > Permitem uma mobilidade extremamente rápida.", //Poder localizado no 2 andar
             "<b>VISÂO AGUÇADA</b> \n Permite enxergar uma maior gama de cores.", //Poder localizado na sala secreta 2 andar
             "<b>TÍMPANO ULTRASÔNICO</b>\n Permite ouvir frequências ultrasônicas.", //Poder localizado no 7 andar
-            "<b> TÍMPANO ULTRASÔNICO</b>\n Proporciona a força de 10 homens, podendo até mesmo quebrar algumas paredes.", //Poder localizado no 5 andar
+            "<b>JUNTAS DE BRAÇO REFORÇADOS</b>\n Proporciona a força de 10 homens, podendo até mesmo quebrar algumas paredes.", //Poder localizado no 5 andar
             "Campo de testes de laser, precisa ser desumanamente rápido.", //Aviso level 3
             "Pisos com minas terrestres ultrasônicas, emitem uma frequência de som abaixo da detecção humana.", //Aviso level 7            );
             "Pisos com laser infra vermelho (invisível ao olho nú)", //Aviso level 6
@@ -99,6 +99,11 @@ public class GameManager : MonoBehaviour {
             GameObject.Find("Canvas").transform.Find("MessagePanel").gameObject.GetComponent<CanvasGroup>().alpha = 0;
         }
         
+    }
+
+    public void forceHideMessage()
+    {
+        messageInView = false;
     }
 
     IEnumerator delayHideMessage()
@@ -191,15 +196,17 @@ public class GameManager : MonoBehaviour {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    IEnumerator returnToMainMenu()
-    { 
-        yield return new WaitForSeconds(1.5f);
-        Application.LoadLevel(1);
+    public void returnToMainMenu()
+    {
+        Destroy(instance);
+        //Application.LoadLevel(0);
+        //GameObject.Find("SoundManager").GetComponent<AudioSource>().mute = true;
+        
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
-	
-	// Update is called once per frame
-	void FixedUpdate () {
+
+    // Update is called once per frame
+    void FixedUpdate () {
         if (doingSetup)
             return;
 	}

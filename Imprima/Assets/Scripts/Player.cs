@@ -55,8 +55,7 @@ public class Player : MonoBehaviour {
     {
         Debug.Log("last counter " + specialItemCounter);
         
-        GameManager.instance.inventoryItems = new List<IInventoryItem> (inventory.getMItems());
-        GameManager.instance.brokenInventoryItems = new List<IInventoryItem> (inventory.getBrokenItems());
+        
 
         // check if player is going back to the previous room
         // if so, we need to decrease the level by 2, since we always increase it
@@ -64,9 +63,13 @@ public class Player : MonoBehaviour {
 
         if (GameManager.instance.startGameOver)
         {
+            GameManager.instance.inventoryItems = new List<IInventoryItem>();
+            GameManager.instance.brokenInventoryItems = new List<IInventoryItem>();
             GameManager.instance.specialItemCounter = 0;
         } else
         {
+            GameManager.instance.inventoryItems = new List<IInventoryItem>(inventory.getMItems());
+            GameManager.instance.brokenInventoryItems = new List<IInventoryItem>(inventory.getBrokenItems());
             GameManager.instance.specialItemCounter = specialItemCounter;
         }
 
@@ -135,6 +138,14 @@ public class Player : MonoBehaviour {
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(0))
+        {
+            
+            if (!finishGame)
+            {
+                GameManager.instance.forceHideMessage();
+            }
+        }
     }
 
     IEnumerator quitGame()
