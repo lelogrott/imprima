@@ -13,7 +13,10 @@ public class SonicBomb : MonoBehaviour {
     private Transform target;
     private bool defeated = false;
 	private float timer = 0f;
-    
+
+
+    private Player player;
+   
     // Use this for initialization
     public void Start ()
 	{
@@ -21,26 +24,35 @@ public class SonicBomb : MonoBehaviour {
 		audio = gameObject.GetComponent<AudioSource>();
         audio.mute = true;
 		audio.clip = bombSound;
-        
+        player = GameObject.Find("Player").GetComponent<Player>();
+
     }
 
 	void Update ()
 	{
-        double distance = Math.Sqrt(Math.Pow(transform.position.x - target.position.x, 2) + Math.Pow(transform.position.y - target.position.y, 2));
-		if (distance < distanceToPlay && target.gameObject.GetComponent<Player>().SoundPowerUp)
-            audio.mute = false;
-        timer += Time.deltaTime;
-		//Debug.LogWarning("distancia: " + distance);
-		double beepPitch = 1/(1 + distance);
-        // Debug.LogWarning("pitch: " + beepPitch);
-        // Debug.LogWarning(">> timer: " + timer);
-        audio.volume = 0.8f - (float)distance / 3;
-        //if (distance
-        if (timer > 0.1)
-		{
-			audio.pitch = (float) ( 10 * beepPitch);
-			timer = 0;
-		}
+        if (player.SoundPowerUp)
+        {
+            double distance = Math.Sqrt(Math.Pow(transform.position.x - target.position.x, 2) + Math.Pow(transform.position.y - target.position.y, 2));
+            if (distance < distanceToPlay && target.gameObject.GetComponent<Player>().SoundPowerUp)
+                audio.mute = false;
+            timer += Time.deltaTime;
+            //Debug.LogWarning("distancia: " + distance);
+            double beepPitch = 1 / (1 + distance);
+            // Debug.LogWarning("pitch: " + beepPitch);
+            // Debug.LogWarning(">> timer: " + timer);
+            audio.volume = 0.8f - (float)distance / 3;
+            //if (distance
+            if (timer > 0.1)
+            {
+                audio.pitch = (float)(10 * beepPitch);
+                timer = 0;
+            }
+        }
+        else
+        {
+            audio.volume = 0;
+        }
+            
 	}
 
 	private void OnTriggerEnter2D(Collider2D other)
